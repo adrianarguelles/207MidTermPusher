@@ -20,6 +20,5 @@
         </form>
     </div>
     <script src="./js/app.js"></script>
-    <script src="https://js.pusher.com/7.0.3/pusher.min.js"></script>
 </body>
 <html>
