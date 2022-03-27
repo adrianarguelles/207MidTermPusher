@@ -10,6 +10,7 @@
 ## Group Members
 - Jasper Francisco
 - Alyanna Seanard
+- Karla Malla
 
 ## About Laravel
 
