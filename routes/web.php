@@ -21,6 +21,10 @@ Route::get('/', function () {
     return view('index');
 });
 
+Route::get('/login', function() {
+    return view('login');
+});
+
 Route::post('/send-message',function(Request $request){
     event(
         new Message(
