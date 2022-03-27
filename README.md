@@ -11,6 +11,7 @@
 - Jasper Francisco
 - Alyanna Seanard
 - Adrian Arguelles
+- Karla Malla
 
 ## About Laravel
 
