@@ -9,6 +9,7 @@
 
 ## Group Members
 - Jasper Francisco
+- Alyanna Seanard
 
 ## About Laravel
 
