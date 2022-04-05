@@ -34,3 +34,7 @@ Route::post('/send-message',function(Request $request){
     );
     return ["success"=> true];
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
