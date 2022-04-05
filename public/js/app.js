@@ -5333,6 +5333,9 @@ Vue.component('example-component', (__webpack_require__(/*! ./components/Example
 var app = new Vue({
   el: '#app'
 });
+window.Echo.channel('chat').listen('.message', function (message) {
+  console.log(message);
+});
 
 /***/ }),
 
