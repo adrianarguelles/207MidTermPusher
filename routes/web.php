@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Events\StatusLinked;
 use App\Events\Message;
+use App\Http\Controllers\ChatsController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -39,6 +40,4 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/chat', function() {
-    return view('chat');
-});
+Route::get('/chats', [ChatsController::class, 'index']);
