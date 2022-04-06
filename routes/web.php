@@ -18,9 +18,9 @@ use Illuminate\Http\Response;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+// Route::get('/', function () {
+//     return view('index');
+// });
 
 Route::get('/login', function() {
     return view('login');
@@ -38,6 +38,6 @@ Route::post('/send-message',function(Request $request){
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/chats', [ChatsController::class, 'index']);
