@@ -7,6 +7,19 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## How to Run the Application
+1. Clone this repository
+1. Open your terminal or command prompt. The succeeding commands must be run in it.
+1. Run `cd <path-to-the-repository-directory>` to set the repository as your current directory.
+2. Run `composer install`
+3. Run `php artisan key:generate`
+4. Run `cp .env.example .env` and configure your database in .env file (i.e., set the variables that start with `DB_`).
+5. Run migration to create tables in database.
+`php artisan migrate`
+6. Final step run websockets server.
+`php artisan websockets:serve`,
+7. Open your web browser and navigate to http://localhost:8000.
+
 ## Group Members
 - Jasper Francisco
 - Alyanna Seanard
