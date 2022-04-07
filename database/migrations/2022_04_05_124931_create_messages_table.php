@@ -17,7 +17,7 @@ class CreateMessagesTable extends Migration
             $table->id('message_id');
             $table->unsignedBigInteger('room_id')->nullable();
             $table->unsignedBigInteger('sender_id');
-            $table->unsignedBigInteger('recipient_id');
+            $table->unsignedBigInteger('recipient_id')->nullable();
             $table->dateTime('sent_at');
             $table->text('message');
             $table->binary('attachment')->nullable();
