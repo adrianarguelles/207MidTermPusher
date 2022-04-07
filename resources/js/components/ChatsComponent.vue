@@ -1,6 +1,5 @@
 <template>
    <div class="row">
-
        <div class="col-8">
            <div class="card card-default">
                <div class="card-header">Messages</div>
@@ -59,7 +58,7 @@
         created() {
             this.fetchMessages();
 
-            Echo.join('chat')
+            window.Echo.join('chat')
                 .here(user => {
                     this.users = user;
                 })
@@ -69,8 +68,13 @@
                 .leaving(user => {
                     this.users = this.users.filter(u => u.id != user.id);
                 })
-                .listen('MessageSent',(event) => {
-                    this.messages.push(event.message);
+                .listen('.message',(event) => {
+                    this.messages.push({
+                        user: {
+                            name: event.username
+                        },
+                        message: event.message
+                    });
                 })
                 .listenForWhisper('typing', user => {
                    this.activeUser = user;
@@ -94,7 +98,6 @@
             },
 
             sendMessage() {
-
                 this.messages.push({
                     user: this.user,
                     message: this.newMessage

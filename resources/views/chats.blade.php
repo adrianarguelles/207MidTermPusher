@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <chats></chats>
+    <chats :user="{{ Auth::user() }}"></chats>
 </div>
 
 @endsection
