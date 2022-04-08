@@ -52,14 +52,14 @@ input{
     color:#fff;
     text-transform: uppercase;
 }
-#messages{
+.messages{
     flex: 1 1 0%;
     overflow: scroll;
     padding: 16px;
 }
 header{
     display: flex;
-    padding-top: 128px;
+    padding-top: 100px;
     padding-bottom: 32px;
     background-color: #8c38ff;
     background-image: linear-gradient(to bottom, #8c38ff,#6317ce);
@@ -77,4 +77,17 @@ header{
 }
 #username:focus{
     box-shadow: 0px 6px 12px rgba(0,0,0,0.25);
+}
+#msg_win{
+    flex: 1 1 90%;
+}
+#room_list{
+    flex: 1 1 10%;
+}
+#main{
+    display: flex;
+}
+#room_list > div{
+    border: 1px solid black;
+    margin: 1px;
 }

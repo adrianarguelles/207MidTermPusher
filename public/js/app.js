@@ -2065,21 +2065,23 @@ var _require = __webpack_require__(/*! axios */ "./node_modules/axios/index.js")
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-var messages_el = document.getElementById("messages");
 var username_input = document.getElementById("username");
 var message_input = document.getElementById("message_input");
 var message_form = document.getElementById("message_form");
+var target_room = document.getElementById("target_room");
+var messages_el = document.getElementById("messages_room1");
 message_form.addEventListener('submit', function (e) {
+  //alert("send to " + target_room.value);
   e.preventDefault();
   var has_errors = false;
 
   if (username_input.value == '') {
-    alert("please enter a username");
+    alert("Please enter a username");
     has_errors = true;
   }
 
   if (message_input.value == '') {
-    alert("please enter a message");
+    alert("Please enter a message");
     has_errors = true;
   }
 
@@ -2092,14 +2094,38 @@ message_form.addEventListener('submit', function (e) {
     url: '/send-message',
     data: {
       username: username_input.value,
-      message: message_input.value
+      message: message_input.value,
+      target_room: target_room.value
     }
   };
   axios(options);
 });
 window.Echo.channel('chat').listen('.message', function (e) {
-  messages_el.innerHTML += '<div class="message"><strong>' + e.username + ':</strong> ' + e.message + '</div>'; //console.log(e);
-});
+  //console.log(e);
+  //alert("received in " + e.target_room);
+  messages_el = document.getElementById("messages_" + e.target_room);
+  messages_el.innerHTML += '<div class="message"><strong>' + e.username + ':</strong>' + e.message + '</div>';
+}); //adrian code
+
+document.getElementById("room1").style.backgroundColor = "red";
+var rooms = document.getElementsByClassName("rooms");
+
+window.onload = function () {
+  for (var i = 0; i < rooms.length; i++) {
+    rooms[i].onclick = selectRoom;
+  }
+};
+
+function selectRoom() {
+  var theRoom = this.id;
+  target_room.value = theRoom; //alert("messages_" + theRoom);
+
+  for (var i = 0; i < rooms.length; i++) {
+    rooms[i].style.backgroundColor = "white";
+  }
+
+  this.style.backgroundColor = "red";
+}
 
 /***/ }),
 

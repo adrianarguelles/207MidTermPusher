@@ -28,8 +28,9 @@ Route::get('/login', function() {
 Route::post('/send-message',function(Request $request){
     event(
         new Message(
-            $request->input('username'),
-            $request->input('message')
+            $request->input('username'), 
+            $request->input('message'),
+            $request->input('target_room')
         )
     );
     return ["success"=> true];
