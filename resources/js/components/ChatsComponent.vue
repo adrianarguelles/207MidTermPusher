@@ -56,10 +56,9 @@
         },
 
         created() {
-            this.fetchMessages();
-
             window.Echo.join('chat')
                 .here(user => {
+                    this.fetchMessages();
                     this.users = user;
                 })
                 .joining(user => {

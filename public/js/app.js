@@ -5322,8 +5322,9 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    this.fetchMessages();
     window.Echo.join('chat').here(function (user) {
+      _this.fetchMessages();
+
       _this.users = user;
     }).joining(function (user) {
       _this.users.push(user);
