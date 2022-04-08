@@ -24,7 +24,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        broadcast(new Message('root', 'hello'));
         return view('home');
     }
 }
