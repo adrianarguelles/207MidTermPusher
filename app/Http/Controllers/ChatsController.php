@@ -24,10 +24,27 @@ class ChatsController extends Controller
 
     public function sendMessage(Request $request)
     {
-        $message = auth()->user()->messages()->create([
-            'message' => $request->input('message'),
-            'sent_at' => now()
-        ]);
+        // Check if the message has an attachment
+        if ($request->has('attachment')) {
+            $attachmentPath = $request->file('attachment')->store('images', 'public');
+
+            // Save message with attachment
+            $message = auth()->user()->messages()->create([
+                'message' => $request->input('message', ''),
+                'sent_at' => now(),
+                'attachment' => $attachmentPath
+            ]);
+
+            return ['status' => 'success', 'imageUrl' => asset($attachmentPath) ];
+        }
+        else {
+            // Save the message under the sending user
+            $message = auth()->user()->messages()->create([
+                'message' => $request->input('message'),
+                'sent_at' => now()
+            ]);
+
+        }
 
         broadcast(new \App\Events\Message($message->user->name, $message->message))->toOthers();
 
