@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Events\StatusLinked;
 use App\Events\Message;
+use App\Http\Controllers\ChatsController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -17,9 +18,9 @@ use Illuminate\Http\Response;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+// Route::get('/', function () {
+//     return view('index');
+// });
 
 Route::get('/login', function() {
     return view('login');
@@ -37,8 +38,9 @@ Route::post('/send-message',function(Request $request){
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/chat', function() {
-    return view('chat');
-});
+Route::get('/chats', [ChatsController::class, 'index']);
+
+Route::get('/messages', [ChatsController::class, 'fetchMessages']);
+Route::post('/messages', [ChatsController::class, 'sendMessage']);
