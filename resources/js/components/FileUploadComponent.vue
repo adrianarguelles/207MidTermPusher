@@ -1,0 +1,107 @@
+<template>
+    <div>
+        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#FileUploadModal">Upload File</button>
+
+        <!-- File Dialog Modal -->
+        <div id="FileUploadModal" class="modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">Upload a File</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form class="container">
+                            <div class="form-group">
+                                <label for="attachment">Attachment: </label>
+                                <input class="form-control" type="file" :disabled="isUploading" accept="image/*" name="attachment" id="attachment" @change="onFileChange($event)">
+                            </div>
+
+                            <div class="text-danger" v-for="error in errors" :key="error">
+                                {{error}}
+                            </div>
+
+                            <div class="FileUploadModal-actions gap-2">
+                                <button type="button" :disabled="isUploading" class="btn btn-primary" @click="uploadFile()">Upload &amp; Send</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style scoped>
+    .FileUploadModal-actions {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-evenly;
+        margin-top: 0.75rem;
+    }
+
+    .FileUploadModal-actions > .btn {
+       flex: 1; 
+    }
+</style>
+
+<script>
+export default {
+    data() {
+        return {
+            errors: [],
+            isUploading: false,
+            attachmentFile: null,
+        }
+    },
+
+    methods: {
+        // Handle changes in file input
+        onFileChange(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                // Just get the first file uploaded
+                this.attachmentFile = files[0];
+            }
+            else {
+                this.attachmentFile = null;
+            }
+        },
+
+        validateInput() {
+            let errors = [];
+
+            if (!this.attachmentFile) {
+                errors.push("Please upload a file.");
+            }
+
+            return errors;
+        },
+        
+        // Send file to server
+        uploadFile() {
+            this.errors = this.validateInput();
+
+            // Don't send if there are errors
+            if (this.errors.length > 0) {
+                return;
+            }
+
+            // Prepare to send the file to the server
+            let formData = new FormData();
+            formData.append('attachment', this.attachmentFile, this.attachmentFile.name);
+
+            // Send request to upload file to server
+            axios.post('messages', formData)
+                .then(response => {
+                    console.log(response)
+                })
+                .catch(() => {
+                    this.errors.push('Unable to upload file. Please try again later.');
+                });
+        }
+    }
+}
+</script>

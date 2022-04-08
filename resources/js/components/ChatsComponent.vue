@@ -12,14 +12,22 @@
                    </ul>
                </div>
 
-               <input
-                    @keydown="sendTypingEvent"
-                    @keyup.enter="sendMessage"
-                    v-model="newMessage"
-                    type="text"
-                    name="message"
-                    placeholder="Enter your message..."
-                    class="form-control">
+               <div class="row">
+                   <div class="col-10">
+                        <input
+                            @keydown="sendTypingEvent"
+                            @keyup.enter="sendMessage"
+                            v-model="newMessage"
+                            type="text"
+                            name="message"
+                            placeholder="Enter your message..."
+                            class="form-control">
+                    </div>
+                    <div class="col-2">
+                        <file-upload-component></file-upload-component>
+                    </div>                   
+               </div>
+
            </div>
             <span class="text-muted" v-if="activeUser" >{{ activeUser.name }} is typing...</span>
        </div>
@@ -36,14 +44,18 @@
                 </div>
             </div>
         </div>
-
    </div>
 </template>
 
 <script>
-    export default {
+    import FileUploadComponent from './FileUploadComponent.vue';
 
+    export default {
         props:['user'],
+
+        components: {
+            FileUploadComponent
+        },
 
         data() {
             return {
