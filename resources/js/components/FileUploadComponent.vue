@@ -96,9 +96,18 @@ export default {
             // Send request to upload file to server
             axios.post('messages', formData)
                 .then(response => {
-                    console.log(response)
+                    const imageUrl = response.data.imageUrl;
+
+                    // Fire an event to the parent component
+                    this.$emit('upload-success', imageUrl);
+
+                    // Close the modal
+                    var modalElement = document.getElementById("FileUploadModal");
+                    var modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+                    modal.hide();
                 })
-                .catch(() => {
+                .catch((err) => {
+                    console.error(err);
                     this.errors.push('Unable to upload file. Please try again later.');
                 });
         }

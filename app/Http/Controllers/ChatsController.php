@@ -32,8 +32,13 @@ class ChatsController extends Controller
             $message = auth()->user()->messages()->create([
                 'message' => $request->input('message', ''),
                 'sent_at' => now(),
-                'attachment' => $attachmentPath
+                'attachment_path' => asset($attachmentPath)
             ]);
+
+            broadcast(new \App\Events\Message(
+                $message->user->name, 
+                $message->message,
+                $message->attachment_path))->toOthers();
 
             return ['status' => 'success', 'imageUrl' => asset($attachmentPath) ];
         }
@@ -46,7 +51,9 @@ class ChatsController extends Controller
 
         }
 
-        broadcast(new \App\Events\Message($message->user->name, $message->message))->toOthers();
+        broadcast(new \App\Events\Message(
+            $message->user->name, 
+            $message->message, null))->toOthers();
 
         return ['status' => 'success'];
     }
