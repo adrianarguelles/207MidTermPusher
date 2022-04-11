@@ -18,7 +18,7 @@
                                 <input class="form-control" type="file" v-bind:disabled="isUploading" accept="image/*" name="attachment" id="attachment" v-on:change="onFileChange($event)">
                             </div>
 
-                            <div class="text-danger" v-for="error in errors" :key="error">
+                            <div class="text-danger" v-for="error in errors" v-bind:key="error">
                                 {{error}}
                             </div>
 
