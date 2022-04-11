@@ -55,7 +55,7 @@
 
 <style scoped>
     .img-thumbnail {
-        max-width: 10rem;
+        max-width: 15rem;
     }
 </style>
 
