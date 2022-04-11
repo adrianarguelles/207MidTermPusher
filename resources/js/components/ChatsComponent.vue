@@ -30,7 +30,7 @@
                             class="form-control">
                     </div>
                     <div class="col-2">
-                        <file-upload-component v-on:upload-success="handleAttachmentUpload"></file-upload-component>
+                        <FileUploadComponent v-on:upload-success="handleAttachmentUpload"></FileUploadComponent>
                     </div>                   
                </div>
 

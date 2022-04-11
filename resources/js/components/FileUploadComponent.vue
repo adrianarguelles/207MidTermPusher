@@ -12,7 +12,7 @@
                     </div>
 
                     <div class="modal-body">
-                        <form class="container">
+                        <form class="container" ref="uploadForm">
                             <div class="form-group">
                                 <label for="attachment">Attachment: </label>
                                 <input class="form-control" type="file" v-bind:disabled="isUploading" accept="image/*" name="attachment" id="attachment" v-on:change="onFileChange($event)">
@@ -57,6 +57,8 @@
 
 <script>
 export default {
+    emits: ['upload-success'],
+
     data() {
         return {
             errors: [],
@@ -110,6 +112,9 @@ export default {
 
                     // Fire an event to the parent component
                     this.$emit('upload-success', imageUrl);
+
+                    // Reset the form
+                    this.$refs.uploadForm.reset();
 
                     // Close the modal
                     var modalElement = document.getElementById("FileUploadModal");

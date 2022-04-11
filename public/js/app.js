@@ -5528,6 +5528,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  emits: ['upload-success'],
   data: function data() {
     return {
       errors: [],
@@ -5574,7 +5575,10 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('messages', formData).then(function (response) {
         var imageUrl = response.data.imageUrl; // Fire an event to the parent component
 
-        _this.$emit('upload-success', imageUrl); // Close the modal
+        _this.$emit('upload-success', imageUrl); // Reset the form
+
+
+        _this.$refs.uploadForm.reset(); // Close the modal
 
 
         var modalElement = document.getElementById("FileUploadModal");
@@ -35192,7 +35196,7 @@ var render = function () {
             "div",
             { staticClass: "col-2" },
             [
-              _c("file-upload-component", {
+              _c("FileUploadComponent", {
                 on: { "upload-success": _vm.handleAttachmentUpload },
               }),
             ],
@@ -35342,7 +35346,7 @@ var render = function () {
             _c("div", { staticClass: "modal-body" }, [
               _c(
                 "form",
-                { staticClass: "container" },
+                { ref: "uploadForm", staticClass: "container" },
                 [
                   _c("div", { staticClass: "form-group" }, [
                     _c("label", { attrs: { for: "attachment" } }, [
