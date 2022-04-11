@@ -5519,6 +5519,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5560,7 +5568,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
       var formData = new FormData();
-      formData.append('attachment', this.attachmentFile, this.attachmentFile.name); // Send request to upload file to server
+      formData.append('attachment', this.attachmentFile, this.attachmentFile.name);
+      this.isUploading = true; // Send request to upload file to server
 
       axios.post('messages', formData).then(function (response) {
         var imageUrl = response.data.imageUrl; // Fire an event to the parent component
@@ -5575,6 +5584,8 @@ __webpack_require__.r(__webpack_exports__);
         console.error(err);
 
         _this.errors.push('Unable to upload file. Please try again later.');
+      })["finally"](function () {
+        _this.isUploading = false;
       });
     }
   }
@@ -35381,14 +35392,36 @@ var render = function () {
                           },
                         },
                       },
-                      [_vm._v("Upload & Send")]
+                      [
+                        _vm.isUploading
+                          ? _c(
+                              "span",
+                              {
+                                staticClass:
+                                  "spinner-border text-light spinner-border-sm",
+                                attrs: { role: "status" },
+                              },
+                              [
+                                _c("span", { staticClass: "visually-hidden" }, [
+                                  _vm._v("Uploading..."),
+                                ]),
+                              ]
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("span", [_vm._v("Upload & Send")]),
+                      ]
                     ),
                     _vm._v(" "),
                     _c(
                       "button",
                       {
                         staticClass: "btn btn-secondary",
-                        attrs: { type: "button", "data-bs-dismiss": "modal" },
+                        attrs: {
+                          type: "button",
+                          "data-bs-dismiss": "modal",
+                          disabled: _vm.isUploading,
+                        },
                       },
                       [_vm._v("Close")]
                     ),

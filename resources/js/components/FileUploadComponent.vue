@@ -15,7 +15,7 @@
                         <form class="container">
                             <div class="form-group">
                                 <label for="attachment">Attachment: </label>
-                                <input class="form-control" type="file" :disabled="isUploading" accept="image/*" name="attachment" id="attachment" @change="onFileChange($event)">
+                                <input class="form-control" type="file" v-bind:disabled="isUploading" accept="image/*" name="attachment" id="attachment" v-on:change="onFileChange($event)">
                             </div>
 
                             <div class="text-danger" v-for="error in errors" :key="error">
@@ -23,8 +23,16 @@
                             </div>
 
                             <div class="FileUploadModal-actions gap-2">
-                                <button type="button" :disabled="isUploading" class="btn btn-primary" @click="uploadFile()">Upload &amp; Send</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" v-bind:disabled="isUploading" class="btn btn-primary" v-on:click="uploadFile()">
+                                    <!-- Spinner -->
+                                    <span class="spinner-border text-light spinner-border-sm" role="status" v-if="isUploading">
+                                        <span class="visually-hidden">Uploading...</span>
+                                    </span>
+                                    <!-- Spinner -->
+
+                                    <span>Upload &amp; Send</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" v-bind:disabled="isUploading">Close</button>
                             </div>
                         </form>
                     </div>
@@ -93,6 +101,8 @@ export default {
             let formData = new FormData();
             formData.append('attachment', this.attachmentFile, this.attachmentFile.name);
 
+            this.isUploading = true;
+
             // Send request to upload file to server
             axios.post('messages', formData)
                 .then(response => {
@@ -109,6 +119,9 @@ export default {
                 .catch((err) => {
                     console.error(err);
                     this.errors.push('Unable to upload file. Please try again later.');
+                })
+                .finally(() => {
+                    this.isUploading = false;
                 });
         }
     }
