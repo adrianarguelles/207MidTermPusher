@@ -19,7 +19,7 @@
 5. Run migration to create tables in the database.
 `php artisan migrate`
 5. Run `npm run watch`.
-6. Open another terminal window and run `php artisan websockets:serve`,
+6. Open another terminal window and run `php artisan websocket:serve`,
 7. Open yet another terminal window and run `php artisan serve`
 7. Open your web browser and navigate to http://localhost:8000.
 
