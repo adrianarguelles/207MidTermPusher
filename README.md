@@ -13,13 +13,15 @@
 1. Run `cd <path-to-the-repository-directory>` to set the repository as your current directory.
 1. Run `npm install`
 2. Run `composer install`
-3. Run `php artisan key:generate`
-3. Run `php artisan storage:link` to links to the images folder
 4. Run `cp .env.example .env` and configure your database in .env file (i.e., set the variables that start with `DB_`).
-5. Run migration to create tables in the database.
+    - Sample database configuration: ![DB .env setting](/DB.env%20settings.png)
+    - If you did this step correctly, there should be a `.env` file and a `.env.example` file inside your 207MidtermPusher folder.
+6. Run `php artisan key:generate`
+7. Run `php artisan storage:link` to links to the images folder
+8. Run migration to create tables in the database.
 `php artisan migrate`
 5. Run `npm run watch`.
-6. Open another terminal window and run `php artisan websockets:serve`,
+6. Open another terminal window and run `php artisan websocket:serve`,
 7. Open yet another terminal window and run `php artisan serve`
 7. Open your web browser and navigate to http://localhost:8000.
 
