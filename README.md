@@ -13,9 +13,9 @@
 1. Run `cd <path-to-the-repository-directory>` to set the repository as your current directory.
 1. Run `npm install`
 2. Run `composer install`
-3. Run `php artisan key:generate`
-3. Run `php artisan storage:link` to links to the images folder
 4. Run `cp .env.example .env` and configure your database in .env file (i.e., set the variables that start with `DB_`).
+4. Run `php artisan key:generate`
+5. Run `php artisan storage:link` to links to the images folder
 5. Run migration to create tables in the database.
 `php artisan migrate`
 5. Run `npm run watch`.
