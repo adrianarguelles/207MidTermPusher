@@ -14,7 +14,8 @@
 1. Run `npm install`
 2. Run `composer install`
 4. Run `cp .env.example .env` and configure your database in .env file (i.e., set the variables that start with `DB_`).
-    - For example, ![DB .env setting](/DB.env%20settings.png)
+    - Sample database configuration: ![DB .env setting](/DB.env%20settings.png)
+    - If you did this step correctly, there should be a `.env` file and a `.env.example` file inside your 207MidtermPusher folder.
 6. Run `php artisan key:generate`
 7. Run `php artisan storage:link` to links to the images folder
 8. Run migration to create tables in the database.
