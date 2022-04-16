@@ -14,9 +14,10 @@
 1. Run `npm install`
 2. Run `composer install`
 4. Run `cp .env.example .env` and configure your database in .env file (i.e., set the variables that start with `DB_`).
-4. Run `php artisan key:generate`
-5. Run `php artisan storage:link` to links to the images folder
-5. Run migration to create tables in the database.
+    - For example, ![DB .env setting](/DB.env%20settings.png)
+6. Run `php artisan key:generate`
+7. Run `php artisan storage:link` to links to the images folder
+8. Run migration to create tables in the database.
 `php artisan migrate`
 5. Run `npm run watch`.
 6. Open another terminal window and run `php artisan websocket:serve`,
