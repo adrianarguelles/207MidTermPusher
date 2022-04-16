@@ -11,13 +11,16 @@
 1. Clone this repository
 1. Open your terminal or command prompt. The succeeding commands must be run in it.
 1. Run `cd <path-to-the-repository-directory>` to set the repository as your current directory.
+1. Run `npm install`
 2. Run `composer install`
 3. Run `php artisan key:generate`
+3. Run `php artisan storage:link` to links to the images folder
 4. Run `cp .env.example .env` and configure your database in .env file (i.e., set the variables that start with `DB_`).
-5. Run migration to create tables in database.
+5. Run migration to create tables in the database.
 `php artisan migrate`
-6. Final step run websockets server.
-`php artisan websockets:serve`,
+5. Run `npm run watch`.
+6. Open another terminal window and run `php artisan websockets:serve`,
+7. Open yet another terminal window and run `php artisan serve`
 7. Open your web browser and navigate to http://localhost:8000.
 
 ## Group Members
@@ -26,7 +29,7 @@
 - Adrian Arguelles
 - Karla Malla
 - Ramel Nandwani
-- 
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

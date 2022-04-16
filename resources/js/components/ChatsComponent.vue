@@ -4,22 +4,36 @@
            <div class="card card-default">
                <div class="card-header">Messages</div>
                <div class="card-body p-0">
-                   <ul class="list-unstyled" style="height:300px; overflow-y:scroll" v-chat-scroll>
+                   <ul id="ChatWindow" class="list-unstyled" style="height: 500px; overflow-y:scroll" v-chat-scroll>
                        <li class="p-2" v-for="(message, index) in messages" :key="index" >
-                           <strong>{{ message.user.name }}</strong>
-                           {{ message.message }}
+                           <div>
+                                <strong>{{ message.user.name }}</strong>
+                                {{ message.message }}
+                           </div>
+                           <div v-if="message.attachment_path">
+                               <!-- Attachment -->
+                               <img class="img-thumbnail" :src="message.attachment_path" @load="scrollToChatBottom">
+                           </div>
                        </li>
                    </ul>
                </div>
 
-               <input
-                    @keydown="sendTypingEvent"
-                    @keyup.enter="sendMessage"
-                    v-model="newMessage"
-                    type="text"
-                    name="message"
-                    placeholder="Enter your message..."
-                    class="form-control">
+               <div class="row">
+                   <div class="col-10">
+                        <input
+                            @keydown="sendTypingEvent"
+                            @keyup.enter="sendMessage"
+                            v-model="newMessage"
+                            type="text"
+                            name="message"
+                            placeholder="Enter your message..."
+                            class="form-control">
+                    </div>
+                    <div class="col-2">
+                        <FileUploadComponent v-on:upload-success="handleAttachmentUpload"></FileUploadComponent>
+                    </div>                   
+               </div>
+
            </div>
             <span class="text-muted" v-if="activeUser" >{{ activeUser.name }} is typing...</span>
        </div>
@@ -36,14 +50,24 @@
                 </div>
             </div>
         </div>
-
    </div>
 </template>
 
-<script>
-    export default {
+<style scoped>
+    .img-thumbnail {
+        max-width: 15rem;
+    }
+</style>
 
+<script>
+    import FileUploadComponent from './FileUploadComponent.vue';
+
+    export default {
         props:['user'],
+
+        components: {
+            FileUploadComponent
+        },
 
         data() {
             return {
@@ -68,11 +92,13 @@
                     this.users = this.users.filter(u => u.id != user.id);
                 })
                 .listen('.message',(event) => {
+                    console.log(event);
                     this.messages.push({
                         user: {
                             name: event.username
                         },
-                        message: event.message
+                        message: event.message,
+                        attachment_path: event.attachment_path
                     });
                 })
                 .listenForWhisper('typing', user => {
@@ -96,6 +122,11 @@
                 })
             },
 
+            scrollToChatBottom() {
+                const chatWindow = document.getElementById('ChatWindow');
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            },
+
             sendMessage() {
                 this.messages.push({
                     user: this.user,
@@ -110,6 +141,14 @@
             sendTypingEvent() {
                 Echo.join('chat')
                     .whisper('typing', this.user);
+            },
+
+            handleAttachmentUpload(attachmentUrl) {
+                this.messages.push({
+                    user: this.user,
+                    message: '',
+                    attachment_path: attachmentUrl 
+                });
             }
         }
     }
