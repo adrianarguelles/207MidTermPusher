@@ -11510,7 +11510,13 @@ body {
 
 .text-muted {
   margin-left: 10px;
-  margin-botto: 15px;
+  margin-bottom: 15px;
+  height: 10px;
+}
+
+.chatboxfix {
+  height: 500px;
+  background: whitesmoke;
 }
 
 .imgText {
@@ -11533,8 +11539,6 @@ body {
 }
 
 .chatBox {
-  height: 540px;
-  /*calc(95% - 185px);*/
   background: whitesmoke;
 }
 
@@ -11566,4 +11570,22 @@ body {
   border-radius: 15px;
   font-size: 1em;
   height: 30px;
+}
+
+.message {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.message .p {
+  position: relative;
+  right: 0;
+  text-align: right;
+  max-width: 65%;
+  padding: 5px 10px;
+  background: #e1e5e6;
+  border-radius: 10px;
+  font-size: 1em;
+  color: #1a9988;
 }

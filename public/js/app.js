@@ -5391,6 +5391,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['user'],
@@ -35178,41 +35186,30 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col-4" }, [
-      _c(
-        "div",
-        { staticClass: "header" },
-        [
-          _vm._m(0),
+      _c("div", { staticClass: "header" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("h4", [
+          _vm._v(_vm._s(_vm.user.name)),
+          _c("br"),
           _vm._v(" "),
-          _vm._l(_vm.users, function (user, index) {
-            return _c("h4", { key: index }, [
-              _vm._v(_vm._s(user.name)),
-              _c("br"),
-              _vm._v(" "),
-              _c("span", [_vm._v(_vm._s(user.email))]),
-            ])
-          }),
+          _c("span", [_vm._v(_vm._s(_vm.user.email))]),
+        ]),
+        _vm._v(" "),
+        _c("ul", { staticClass: "nav_icons" }, [
+          _c(
+            "li",
+            [
+              _c("ion-icon", {
+                attrs: { name: "chatbubble-ellipses-outline" },
+              }),
+            ],
+            1
+          ),
           _vm._v(" "),
-          _c("ul", { staticClass: "nav_icons" }, [
-            _c(
-              "li",
-              [
-                _c("ion-icon", {
-                  attrs: { name: "chatbubble-ellipses-outline" },
-                }),
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "li",
-              [_c("ion-icon", { attrs: { name: "create-outline" } })],
-              1
-            ),
-          ]),
-        ],
-        2
-      ),
+          _c("li", [_c("ion-icon", { attrs: { name: "create-outline" } })], 1),
+        ]),
+      ]),
       _vm._v(" "),
       _vm._m(1),
       _vm._v(" "),
@@ -35222,23 +35219,26 @@ var render = function () {
     _c("div", { staticClass: "col-8" }, [
       _vm._m(3),
       _vm._v(" "),
-      _c("div", { staticClass: "card chatBox card-default" }, [
-        _c("div", { staticClass: "card-body p-0" }, [
+      _c("div", { staticClass: "card card-default" }, [
+        _c("div", { staticClass: "card-body chatboxfix p-0" }, [
           _c(
             "ul",
             {
               staticClass: "list-unstyled",
-              staticStyle: { height: "300px", "overflow-y": "scroll" },
+              staticStyle: { height: "460px", "overflow-y": "scroll" },
             },
             _vm._l(_vm.messages, function (message, index) {
               return _c("li", { key: index, staticClass: "p-2" }, [
-                _c("div", [
-                  _c("strong", [_vm._v(_vm._s(message.user.name))]),
-                  _vm._v(
-                    "\n                                 " +
-                      _vm._s(message.message) +
-                      "\n                             "
-                  ),
+                _c("div", { staticClass: "message my_message" }, [
+                  _c("span", { staticClass: "p" }, [
+                    _c("strong", [
+                      _vm._v(" " + _vm._s(message.user.name) + " : "),
+                    ]),
+                    _vm._v(
+                      "\n                                     " +
+                        _vm._s(message.message)
+                    ),
+                  ]),
                 ]),
                 _vm._v(" "),
                 message.attachment_path
@@ -35254,13 +35254,13 @@ var render = function () {
             }),
             0
           ),
+          _vm._v(" "),
+          _vm.activeUser
+            ? _c("span", { staticClass: "text-muted" }, [
+                _vm._v(_vm._s(_vm.activeUser.name) + " is typing..."),
+              ])
+            : _vm._e(),
         ]),
-        _vm._v(" "),
-        _vm.activeUser
-          ? _c("span", { staticClass: "text-muted" }, [
-              _vm._v(_vm._s(_vm.activeUser.name) + " is typing..."),
-            ])
-          : _vm._e(),
         _vm._v(" "),
         _c(
           "div",

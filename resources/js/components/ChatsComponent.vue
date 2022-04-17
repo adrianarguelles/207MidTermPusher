@@ -8,7 +8,7 @@
                     <img src = "https://via.placeholder.com/150" class="cover">
                 </div>
                 
-                <h4 v-for="(user, index) in users" :key="index">{{ user.name }}<br> <span>{{user.email}}</span></h4>
+                <h4>{{ user.name }}<br> <span>{{user.email}}</span></h4>
                 <ul class = "nav_icons">
                     <li><ion-icon name="chatbubble-ellipses-outline"></ion-icon></li>
                     <li><ion-icon name="create-outline"></ion-icon></li>
@@ -43,10 +43,10 @@
 
             </div>
 
-            <!-- FROM ORIG FILE/ DON'T WANT TO MESS WITH THIS MUNA SORRY -->
+            <!-- FROM ORIG FILE/ DON'T WANT TO MESS WITH THIS MUNA SORRY
 
             
-            <!--<div class="card card-default">
+            <div class="card card-default">
                 <div class="card-header">Active Users</div>
                     <div class="card-body">
                         <ul>
@@ -72,24 +72,32 @@
                 </div>
             </div>  
 
-            <div class="card chatBox card-default">
+            <div class="card card-default">
                 
-                   <div class="card-body p-0">
-                       <ul class="list-unstyled" style="height:300px; overflow-y:scroll">
-                           <li class="p-2" v-for="(message, index) in messages" :key="index" >
-                               <div>
-                                    <strong>{{ message.user.name }}</strong>
-                                    {{ message.message }}
-                                </div>
+                    <div class="card-body chatboxfix p-0">
+                        
+                            <ul class="list-unstyled" style="height:460px; overflow-y:scroll">
+                                <li class="p-2" v-for="(message, index) in messages" :key="index" >
+                                    <div class="message my_message">
+                                        <span class="p"><strong> {{ message.user.name }} : </strong>
+                                        {{ message.message }}</span>
+                                    </div>
                                 
-                                <div v-if="message.attachment_path">
-                                    <!-- Attachment -->
-                                    <img class="img-thumbnail" :src="message.attachment_path" @load="scrollToChatBottom">
-                                </div>
-                           </li>
-                       </ul>
+                                    <div v-if="message.attachment_path">
+                                        <!-- Attachment -->
+                                        <img class="img-thumbnail" :src="message.attachment_path" @load="scrollToChatBottom">
+                                    </div>
+
+                                </li>
+                                
+                                
+                                
+                            </ul>
+                            <span class="text-muted" v-if="activeUser" >{{ activeUser.name }} is typing...</span>
+                        
                     </div>
-                    <span class="text-muted" v-if="activeUser" >{{ activeUser.name }} is typing...</span>
+                    
+                    
 
                     <!--chat input-->
                     <div class="chatbox_input">
