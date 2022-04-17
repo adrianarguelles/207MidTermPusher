@@ -35178,53 +35178,49 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col-4" }, [
-      _c("div", { staticClass: "header" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _vm._m(1),
-        _vm._v(" "),
-        _c("ul", { staticClass: "nav_icons" }, [
-          _c(
-            "li",
-            [
-              _c("ion-icon", {
-                attrs: { name: "chatbubble-ellipses-outline" },
-              }),
-            ],
-            1
-          ),
+      _c(
+        "div",
+        { staticClass: "header" },
+        [
+          _vm._m(0),
           _vm._v(" "),
-          _c("li", [_c("ion-icon", { attrs: { name: "create-outline" } })], 1),
-        ]),
-      ]),
+          _vm._l(_vm.users, function (user, index) {
+            return _c("h4", { key: index }, [
+              _vm._v(_vm._s(user.name)),
+              _c("br"),
+              _vm._v(" "),
+              _c("span", [_vm._v(_vm._s(user.email))]),
+            ])
+          }),
+          _vm._v(" "),
+          _c("ul", { staticClass: "nav_icons" }, [
+            _c(
+              "li",
+              [
+                _c("ion-icon", {
+                  attrs: { name: "chatbubble-ellipses-outline" },
+                }),
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "li",
+              [_c("ion-icon", { attrs: { name: "create-outline" } })],
+              1
+            ),
+          ]),
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _vm._m(1),
       _vm._v(" "),
       _vm._m(2),
-      _vm._v(" "),
-      _vm._m(3),
-      _vm._v(" "),
-      _c("div", { staticClass: "card card-default" }, [
-        _c("div", { staticClass: "card-header" }, [_vm._v("Active Users")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-body" }, [
-          _c(
-            "ul",
-            _vm._l(_vm.users, function (user, index) {
-              return _c("li", { key: index, staticClass: "py-2" }, [
-                _vm._v(
-                  "\n                             " +
-                    _vm._s(user.name) +
-                    "\n                         "
-                ),
-              ])
-            }),
-            0
-          ),
-        ]),
-      ]),
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "col-8" }, [
-      _vm._m(4),
+      _vm._m(3),
       _vm._v(" "),
       _c("div", { staticClass: "card chatBox card-default" }, [
         _c("div", { staticClass: "card-body p-0" }, [
@@ -35333,17 +35329,6 @@ var staticRenderFns = [
         staticClass: "cover",
         attrs: { src: "https://via.placeholder.com/150" },
       }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("h4", [
-      _vm._v("Karla Malla"),
-      _c("br"),
-      _vm._v(" "),
-      _c("span", [_vm._v("@karlamalla")]),
     ])
   },
   function () {

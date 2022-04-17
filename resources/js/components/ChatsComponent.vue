@@ -8,7 +8,7 @@
                     <img src = "https://via.placeholder.com/150" class="cover">
                 </div>
                 
-                <h4>Karla Malla<br> <span>@karlamalla</span></h4>
+                <h4 v-for="(user, index) in users" :key="index">{{ user.name }}<br> <span>{{user.email}}</span></h4>
                 <ul class = "nav_icons">
                     <li><ion-icon name="chatbubble-ellipses-outline"></ion-icon></li>
                     <li><ion-icon name="create-outline"></ion-icon></li>
@@ -46,7 +46,7 @@
             <!-- FROM ORIG FILE/ DON'T WANT TO MESS WITH THIS MUNA SORRY -->
 
             
-            <div class="card card-default">
+            <!--<div class="card card-default">
                 <div class="card-header">Active Users</div>
                     <div class="card-body">
                         <ul>
@@ -56,7 +56,7 @@
                         </ul>
                     </div>
                 
-            </div>
+            </div>-->
         </div>
 
        <div class="col-8">
