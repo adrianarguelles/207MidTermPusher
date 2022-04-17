@@ -5328,6 +5328,69 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['user'],
@@ -35114,27 +35177,71 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-8" }, [
-      _c("div", { staticClass: "card card-default" }, [
-        _c("div", { staticClass: "card-header" }, [_vm._v("Messages")]),
+    _c("div", { staticClass: "col-4" }, [
+      _c("div", { staticClass: "header" }, [
+        _vm._m(0),
         _vm._v(" "),
+        _vm._m(1),
+        _vm._v(" "),
+        _c("ul", { staticClass: "nav_icons" }, [
+          _c(
+            "li",
+            [
+              _c("ion-icon", {
+                attrs: { name: "chatbubble-ellipses-outline" },
+              }),
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("li", [_c("ion-icon", { attrs: { name: "create-outline" } })], 1),
+        ]),
+      ]),
+      _vm._v(" "),
+      _vm._m(2),
+      _vm._v(" "),
+      _vm._m(3),
+      _vm._v(" "),
+      _c("div", { staticClass: "card card-default" }, [
+        _c("div", { staticClass: "card-header" }, [_vm._v("Active Users")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c(
+            "ul",
+            _vm._l(_vm.users, function (user, index) {
+              return _c("li", { key: index, staticClass: "py-2" }, [
+                _vm._v(
+                  "\n                             " +
+                    _vm._s(user.name) +
+                    "\n                         "
+                ),
+              ])
+            }),
+            0
+          ),
+        ]),
+      ]),
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-8" }, [
+      _vm._m(4),
+      _vm._v(" "),
+      _c("div", { staticClass: "card chatBox card-default" }, [
         _c("div", { staticClass: "card-body p-0" }, [
           _c(
             "ul",
             {
-              directives: [{ name: "chat-scroll", rawName: "v-chat-scroll" }],
               staticClass: "list-unstyled",
-              staticStyle: { height: "500px", "overflow-y": "scroll" },
-              attrs: { id: "ChatWindow" },
+              staticStyle: { height: "300px", "overflow-y": "scroll" },
             },
             _vm._l(_vm.messages, function (message, index) {
               return _c("li", { key: index, staticClass: "p-2" }, [
                 _c("div", [
                   _c("strong", [_vm._v(_vm._s(message.user.name))]),
                   _vm._v(
-                    "\n                             " +
+                    "\n                                 " +
                       _vm._s(message.message) +
-                      "\n                        "
+                      "\n                             "
                   ),
                 ]),
                 _vm._v(" "),
@@ -35153,8 +35260,27 @@ var render = function () {
           ),
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-10" }, [
+        _vm.activeUser
+          ? _c("span", { staticClass: "text-muted" }, [
+              _vm._v(_vm._s(_vm.activeUser.name) + " is typing..."),
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "chatbox_input" },
+          [
+            _c(
+              "ion-icon",
+              { attrs: { name: "attach-outline" } },
+              [
+                _c("FileUploadComponent", {
+                  on: { "upload-success": _vm.handleAttachmentUpload },
+                }),
+              ],
+              1
+            ),
+            _vm._v(" "),
             _c("input", {
               directives: [
                 {
@@ -35190,52 +35316,101 @@ var render = function () {
                 },
               },
             }),
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-2" },
-            [
-              _c("FileUploadComponent", {
-                on: { "upload-success": _vm.handleAttachmentUpload },
-              }),
-            ],
-            1
-          ),
-        ]),
-      ]),
-      _vm._v(" "),
-      _vm.activeUser
-        ? _c("span", { staticClass: "text-muted" }, [
-            _vm._v(_vm._s(_vm.activeUser.name) + " is typing..."),
-          ])
-        : _vm._e(),
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "col-4" }, [
-      _c("div", { staticClass: "card card-default" }, [
-        _c("div", { staticClass: "card-header" }, [_vm._v("Active Users")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-body" }, [
-          _c(
-            "ul",
-            _vm._l(_vm.users, function (user, index) {
-              return _c("li", { key: index, staticClass: "py-2" }, [
-                _vm._v(
-                  "\n                         " +
-                    _vm._s(user.name) +
-                    "\n                     "
-                ),
-              ])
-            }),
-            0
-          ),
-        ]),
+          ],
+          1
+        ),
       ]),
     ]),
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "userimg" }, [
+      _c("img", {
+        staticClass: "cover",
+        attrs: { src: "https://via.placeholder.com/150" },
+      }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h4", [
+      _vm._v("Karla Malla"),
+      _c("br"),
+      _vm._v(" "),
+      _c("span", [_vm._v("@karlamalla")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "search_chat" }, [
+      _c("div", [
+        _c("input", {
+          attrs: { type: "text", placeholder: "Search or start a new chat" },
+        }),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "chatlist", staticStyle: { "overflow-y": "scroll" } },
+      [
+        _c("div", { staticClass: "block active" }, [
+          _c("div", { staticClass: "details" }, [
+            _c("div", { staticClass: "listHead" }, [
+              _c("h4", [_vm._v("Ali Seanard")]),
+              _vm._v(" "),
+              _c("p", { staticClass: "time" }, [_vm._v("10:23")]),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "message_p" }, [
+              _c("p", [
+                _vm._v(
+                  "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog"
+                ),
+              ]),
+            ]),
+          ]),
+        ]),
+      ]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "rightSide" }, [
+      _c("div", { staticClass: "header" }, [
+        _c("div", { staticClass: "imgText" }, [
+          _c("div", { staticClass: "userimg" }, [
+            _c("img", {
+              staticClass: "cover",
+              attrs: { src: "https://via.placeholder.com/150" },
+            }),
+          ]),
+          _vm._v(" "),
+          _c("h4", [
+            _vm._v("Ali Seanard "),
+            _c("br"),
+            _vm._v(" "),
+            _c("span", [_vm._v("Online")]),
+          ]),
+        ]),
+      ]),
+    ])
+  },
+]
 render._withStripped = true
 
 
