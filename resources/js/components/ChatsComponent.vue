@@ -243,6 +243,7 @@
             fetchChatrooms(){//runs only when page is loaded
                 axios.get('rooms').then(response =>{
                     if(response.data.length > 0){
+                        console.log(response.data);
                         this.chatrooms = response.data;
                         this.activeRoom = this.chatrooms[0].room_id;  
                     }

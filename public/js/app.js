@@ -5514,6 +5514,7 @@ __webpack_require__.r(__webpack_exports__);
       //runs only when page is loaded
       axios.get('rooms').then(function (response) {
         if (response.data.length > 0) {
+          console.log(response.data);
           _this3.chatrooms = response.data;
           _this3.activeRoom = _this3.chatrooms[0].room_id;
         }
