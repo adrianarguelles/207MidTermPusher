@@ -14,8 +14,8 @@
 
             <div>
                 <p>Current Profile Picture:</p>
-                <img v-if="currentProfilePicture" class="img-thumbnail" style="max-width: 300px;" :src="currentProfilePicture" alt="Profile picture">
-                <p v-else-if="currentProfilePicture.length === 0">No profile picture.</p>
+                <img v-if="currentProfilePicture !== null" class="img-thumbnail" style="max-width: 300px;" :src="currentProfilePicture" alt="Profile picture">
+                <p v-else-if="currentProfilePicture === null">No profile picture.</p>
             </div>
 
             <div>

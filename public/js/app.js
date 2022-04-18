@@ -35569,7 +35569,7 @@ var render = function () {
         _c("div", [
           _c("p", [_vm._v("Current Profile Picture:")]),
           _vm._v(" "),
-          _vm.currentProfilePicture
+          _vm.currentProfilePicture !== null
             ? _c("img", {
                 staticClass: "img-thumbnail",
                 staticStyle: { "max-width": "300px" },
@@ -35578,7 +35578,7 @@ var render = function () {
                   alt: "Profile picture",
                 },
               })
-            : _vm.currentProfilePicture.length === 0
+            : _vm.currentProfilePicture === null
             ? _c("p", [_vm._v("No profile picture.")])
             : _vm._e(),
         ]),
