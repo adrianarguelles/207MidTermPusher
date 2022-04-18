@@ -28,4 +28,6 @@ Route::get('/register', [App\Http\Controllers\RegisterController::class, 'create
 Route::get('/messages', [ChatsController::class, 'fetchMessages']);
 Route::post('/messages', [ChatsController::class, 'sendMessage']);
 
-Route::post('/users/{id}/profile', [ProfileController::class, 'update']);
+Route::get('/edit-profile', [ProfileController::class, 'showTestPage']);
+Route::get('/profile', [ProfileController::class, 'getProfile']);
+Route::post('/profile', [ProfileController::class, 'updateProfile']);

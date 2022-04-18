@@ -13,17 +13,33 @@ class ProfileController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
+    }
+
+    public function showTestPage()
+    {
+        return view('edit-profile-test');
+    }
+
+    // Retrieves the current user's profile
+    public function getProfile() {
+        $currentUser = auth()->user();
+
+        return [
+            'firstName' => $currentUser->first_name,
+            'lastName' => $currentUser->last_name,
+            'profilePicture' => $currentUser->profile_picture
+        ];
     }
 
     // Endpoint to update a certain user's name and profile picture
-    public function update(Request $request, $id)
+    public function updateProfile(Request $request)
     {
         // Validate input before saving changes to the database
         $validator = Validator::make($request->all(), [
-            'firstname' => 'required',
-            'lastname' => 'required',
-            'profilepicture' => 'image|mimes:jpeg,jpg,png|max:4096'
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'profilePicture' => 'image|mimes:jpeg,jpg,png|max:4096'
         ]);
         
         // If the request does not pass validation, inform the user
@@ -32,25 +48,28 @@ class ProfileController extends Controller
         }
 
         // Retrieve input data from the request
-        $firstName = $request->input('firstname');
-        $lastName = $request->input('lastname');
-        $profilePicture = $request->file('profilepicture');
+        $firstName = $request->input('firstName');
+        $lastName = $request->input('lastName');
         
         // Update the user's record in the database
-        $user = User::findOrFail($id);
+        $user = auth()->user();
         $user->first_name = $firstName;
         $user->last_name = $lastName;
-        $user->profile_picture = $profilePicture;
-        // TODO: Allow updating of profile picture
+
+        // Check if request includes a profile picture
+        if ($request->hasFile('profilePicture')) {
+            $profilePicturePath = $request->file('profilePicture')->store('images', 'public');
+            $user->profile_picture = $profilePicturePath;
+        }
 
         $user->save();
         
         // Echo back the request as a successful response
         return [
-            "id" => $id,
+            "id" => $user->id,
             "firstName" => $user->first_name,
             "lastName" => $user->last_name,
-            "profilePicture" => (!is_null($profilePicture)) ? $profilePicture->extension() : ""
+            "profilePicture" => $user->profile_picture
         ];
     }
 
