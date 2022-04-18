@@ -23,8 +23,6 @@ Auth::routes();
 
 Route::get('/', [App\Http\Controllers\ChatsController::class, 'index'])->name('home');
 
-Route::get('/register', [App\Http\Controllers\RegisterController::class, 'create']);
-
 Route::get('/messages', [ChatsController::class, 'fetchMessages']);
 Route::post('/messages', [ChatsController::class, 'sendMessage']);
 
