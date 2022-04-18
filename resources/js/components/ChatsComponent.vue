@@ -141,7 +141,7 @@
                 .leaving(user => {
                     this.users = this.users.filter(u => u.id != user.id);
                 })
-                .listen('.message',(event) => {   
+                .listen('.message',(event) => {
                     let found;
                     for(const indx in this.roomMsgs){
                         console.log(indx, this.roomMsgs[indx]);
@@ -264,12 +264,13 @@
                         messages:[]
                     });
                     //this.fetchMessages();
+                    /*
                     for(const indx in this.roomMsgs){
                         console.log(indx, this.roomMsgs[indx]);
                         for(const inx2 in this.roomMsgs[indx]){
                             console.log(inx2, this.roomMsgs[indx][inx2]);                    
                         }
-                    }                    
+                    }*/             
                 });
                 console.log('after',this.roomMsgs);
                 this.newRoom = '';
