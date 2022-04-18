@@ -5397,7 +5397,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.fetchChatrooms();
-    Echo.join('chat').here(function (user) {
+    window.Echo.join('chat').here(function (user) {
       _this.users = user;
 
       _this.fetchMessages();
@@ -5408,14 +5408,22 @@ __webpack_require__.r(__webpack_exports__);
         return u.id != user.id;
       });
     }).listen('.message', function (event) {
-      var found;
+      var found = _this.getTargetRoomIndex(event.room_id);
 
-      for (var indx in _this.roomMsgs) {
-        for (var inx2 in _this.roomMsgs[indx]) {
-          if (inx2 == 'room_id' && _this.roomMsgs[indx][inx2] == event.room_id) {
-            found = indx;
-          }
-        }
+      if (found == null) {
+        _this.chatrooms.unshift({
+          room_id: event.room_id,
+          room_name: event.room_name
+        });
+
+        _this.roomMsgs.unshift({
+          room_id: event.room_id,
+          room_name: event.room_name,
+          messages: []
+        });
+
+        _this.activeRoom = event.room_id;
+        found = _this.getTargetRoomIndex(event.room_id);
       }
 
       _this.roomMsgs[found].messages.push({
@@ -5443,7 +5451,6 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('messages').then(function (response) {
         _this2.roomMsgs = response.data;
       });
-      console.log('fetching messages');
     },
     scrollToChatBottom: function scrollToChatBottom() {
       var chatWindow = document.getElementById('ChatWindow');
@@ -5456,16 +5463,7 @@ __webpack_require__.r(__webpack_exports__);
           message: this.newMessage
       });*/
       //chatroom version to push new message to array
-      var found;
-
-      for (var indx in this.roomMsgs) {
-        for (var inx2 in this.roomMsgs[indx]) {
-          if (inx2 == 'room_id' && this.roomMsgs[indx][inx2] == this.activeRoom) {
-            found = indx;
-          }
-        }
-      }
-
+      var found = this.getTargetRoomIndex(this.activeRoom);
       this.roomMsgs[found].messages.push({
         user: this.user,
         message: this.newMessage
@@ -5487,16 +5485,7 @@ __webpack_require__.r(__webpack_exports__);
           attachment_path: attachmentUrl 
       });
       */
-      var found;
-
-      for (var indx in this.roomMsgs) {
-        for (var inx2 in this.roomMsgs[indx]) {
-          if (inx2 == 'room_id' && this.roomMsgs[indx][inx2] == event.room_id) {
-            found = indx;
-          }
-        }
-      }
-
+      var found = this.getTargetRoomIndex(this.activeRoom);
       this.roomMsgs[found].messages.push({
         user: this.user,
         message: '',
@@ -5510,7 +5499,6 @@ __webpack_require__.r(__webpack_exports__);
       //runs only when page is loaded
       axios.get('rooms').then(function (response) {
         if (response.data.length > 0) {
-          console.log(response.data);
           _this3.chatrooms = response.data;
           _this3.activeRoom = _this3.chatrooms[0].room_id;
         }
@@ -5530,7 +5518,9 @@ __webpack_require__.r(__webpack_exports__);
           room_name: response.data.room_name
         });
 
-        _this4.roomMsgs.push({
+        _this4.activeRoom = response.data.id;
+
+        _this4.roomMsgs.unshift({
           room_id: response.data.id,
           room_name: response.data.room_name,
           messages: []
@@ -5543,11 +5533,25 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('addMember', {
         email: this.newMemberEmail,
         room_id: this.activeRoom
-      }).then(function (response) {
-        console.log(response);
+      });
+      var found = this.getTargetRoomIndex(this.activeRoom);
+      this.roomMsgs[found].messages.push({
+        user: '',
+        message: this.newMemberEmail + ' has been added'
       });
       this.addingMember = false;
       this.newMemberEmail = '';
+    },
+    getTargetRoomIndex: function getTargetRoomIndex(targetRoom) {
+      var found = null;
+
+      for (var indx in this.roomMsgs) {
+        if (this.roomMsgs[indx].room_id == targetRoom) {
+          found = indx;
+        }
+      }
+
+      return found;
     }
   }
 });

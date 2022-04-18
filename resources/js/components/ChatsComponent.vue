@@ -108,18 +108,18 @@
 
         data() {
             return {
-                roomMsgs:[],
+                roomMsgs: [],
                 /*roomMsgs replaces messages
                 structure based on ChatsController:
                 $roomMsgs[] = array('room_id'=> $result->room_id, 'room_name'=>$result->room_name, 'messages'=> $msgs);
                 */                
                 //messages: [],
                 newMessage: '',
-                users:[],
+                users: [],
                 activeUser: false,
                 typingTimer: false,
                 //chatroom variables
-                chatrooms:[],
+                chatrooms: [],
                 activeRoom:'',
                 newRoom:'',
                 addingRoom:false,
@@ -130,7 +130,7 @@
 
         created() {
             this.fetchChatrooms();
-            Echo.join('chat')
+            window.Echo.join('chat')
                 .here(user => {
                     this.users = user;
                     this.fetchMessages(); 
@@ -140,21 +140,27 @@
                 })
                 .leaving(user => {
                     this.users = this.users.filter(u => u.id != user.id);
-                })
+                })               
                 .listen('.message',(event) => {
-                    let found;
-                    for(const indx in this.roomMsgs){
-                        for(const inx2 in this.roomMsgs[indx]){
-                            if(inx2 == 'room_id' && this.roomMsgs[indx][inx2]==event.room_id){
-                                found = indx;
-                            }                       
-                        }
+                    let found = this.getTargetRoomIndex(event.room_id);
+                    if(found == null){
+                        this.chatrooms.unshift({
+                            room_id: event.room_id,
+                            room_name: event.room_name
+                        });
+                        this.roomMsgs.unshift({
+                            room_id: event.room_id,
+                            room_name: event.room_name,
+                            messages:[]
+                        });
+                        this.activeRoom = event.room_id;
+                        found = this.getTargetRoomIndex(event.room_id);
                     }
                     this.roomMsgs[found].messages.push({
                         user: { name: event.username},
                         message: event.message
                     });         
-                })
+                })              
                 .listenForWhisper('typing', user => {
                    this.activeUser = user;
 
@@ -165,7 +171,7 @@
                    this.typingTimer = setTimeout(() => {
                        this.activeUser = false;
                    }, 3000);
-                })
+                });
 
         },
 
@@ -174,7 +180,6 @@
                 axios.get('messages').then(response => {
                     this.roomMsgs = response.data;
                 });
-                console.log('fetching messages');
             },
 
             scrollToChatBottom() {
@@ -190,14 +195,7 @@
                 });*/
 
                 //chatroom version to push new message to array
-                let found;
-                for(const indx in this.roomMsgs){
-                    for(const inx2 in this.roomMsgs[indx]){
-                        if(inx2 == 'room_id' && this.roomMsgs[indx][inx2]==this.activeRoom){
-                            found = indx;
-                        }                       
-                    }
-                }                   
+                let found = this.getTargetRoomIndex(this.activeRoom);          
                 this.roomMsgs[found].messages.push({
                     user: this.user,
                     message: this.newMessage
@@ -223,25 +221,17 @@
                     attachment_path: attachmentUrl 
                 });
                 */
-                let found;
-                for(const indx in this.roomMsgs){
-                    for(const inx2 in this.roomMsgs[indx]){
-                        if(inx2 == 'room_id' && this.roomMsgs[indx][inx2]==event.room_id){
-                            found = indx;
-                        }                       
-                    }
-                }
-            this.roomMsgs[found].messages.push({
-                user: this.user,
-                message: '',
-                attachment_path:attachmentUrl
-            });                 
+                let found = this.getTargetRoomIndex(this.activeRoom);
+                this.roomMsgs[found].messages.push({
+                    user: this.user,
+                    message: '',
+                    attachment_path:attachmentUrl
+                });
             },
             //chatroom methods
             fetchChatrooms(){//runs only when page is loaded
                 axios.get('rooms').then(response =>{
                     if(response.data.length > 0){
-                        console.log(response.data);
                         this.chatrooms = response.data;
                         this.activeRoom = this.chatrooms[0].room_id;  
                     }
@@ -258,11 +248,12 @@
                         room_id: response.data.id,
                         room_name: response.data.room_name
                     });
-                    this.roomMsgs.push({
+                    this.activeRoom = response.data.id;
+                    this.roomMsgs.unshift({
                         room_id: response.data.id,
                         room_name: response.data.room_name,
                         messages:[]
-                    });           
+                    });      
                 });
                 this.newRoom = '';
                 this.addingRoom = false;             
@@ -271,11 +262,23 @@
                 axios.post('addMember', {
                     email: this.newMemberEmail,
                     room_id: this.activeRoom
-                }).then(response =>{
-                    console.log(response);
                 });
+                let found = this.getTargetRoomIndex(this.activeRoom);
+                this.roomMsgs[found].messages.push({
+                user: '',
+                message: this.newMemberEmail + ' has been added'
+                });                
                 this.addingMember = false;
                 this.newMemberEmail='';
+            },
+            getTargetRoomIndex(targetRoom){
+                let found = null;
+                for(const indx in this.roomMsgs){
+                    if(this.roomMsgs[indx].room_id==targetRoom){
+                        found = indx;
+                    }                       
+                }
+                return found;
             }
         }
     }

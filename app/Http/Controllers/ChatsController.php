@@ -34,8 +34,8 @@ class ChatsController extends Controller
         $chatrooms = Chatroom::leftJoin('members','members.room_id', '=', 'chatrooms.room_id')
         ->where('members.user_id', auth()->user()->id)
         ->get();
+    
         if(count($chatrooms)){
-            $roomMsgs;
             foreach($chatrooms as $result){
                 $msgs = Message::with('user')->where('room_id',$result->room_id)->get();
                 $roomMsgs[] = array('room_id'=> $result->room_id, 'room_name'=>$result->room_name, 'messages'=> $msgs);
@@ -43,7 +43,7 @@ class ChatsController extends Controller
             //return Message::with('user')->get();
             return $roomMsgs;  
         }else{
-            return false;
+            return array();
         }
 
       
@@ -130,7 +130,22 @@ class ChatsController extends Controller
         $members->room_id = $request->room_id;
         $members->user_id = $user[0]->id;
         $members->save();
-        return ['status' => 'success'];
+
+        $chatroom = Chatroom::where('room_id', $request->room_id)->get();
+        $roomMsgs;
+        
+        if(count($chatroom)){
+            foreach($chatroom as $result){
+                $msgs = Message::with('user')->where('room_id',$result->room_id)->get();
+                $roomMsgs = array('room_id'=> $result->room_id, 'room_name'=>$result->room_name, 'messages'=> $msgs);
+            }
+        }
+        broadcast(new \App\Events\Message(
+            '',
+            $roomMsgs['room_id'],
+            auth()->user()->name.' has added you',
+            null,
+            $roomMsgs['room_name']))->toOthers();
     }
 
     public function test(){
