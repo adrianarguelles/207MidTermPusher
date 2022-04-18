@@ -5411,11 +5411,7 @@ __webpack_require__.r(__webpack_exports__);
       var found;
 
       for (var indx in _this.roomMsgs) {
-        console.log(indx, _this.roomMsgs[indx]);
-
         for (var inx2 in _this.roomMsgs[indx]) {
-          console.log(inx2, _this.roomMsgs[indx][inx2]);
-
           if (inx2 == 'room_id' && _this.roomMsgs[indx][inx2] == event.room_id) {
             found = indx;
           }
@@ -5521,7 +5517,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     selectRoom: function selectRoom(event) {
-      this.activeRoom = event.target.id; //alert(this.activeRoom);
+      this.activeRoom = event.target.id;
     },
     createRoom: function createRoom() {
       var _this4 = this;
@@ -5529,24 +5525,17 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('newRoom', {
         room_name: this.newRoom
       }).then(function (response) {
-        _this4.chatrooms.unshift(response.data);
+        _this4.chatrooms.unshift({
+          room_id: response.data.id,
+          room_name: response.data.room_name
+        });
 
         _this4.roomMsgs.push({
           room_id: response.data.id,
           room_name: response.data.room_name,
           messages: []
-        }); //this.fetchMessages();
-
-        /*
-        for(const indx in this.roomMsgs){
-            console.log(indx, this.roomMsgs[indx]);
-            for(const inx2 in this.roomMsgs[indx]){
-                console.log(inx2, this.roomMsgs[indx][inx2]);                    
-            }
-        }*/
-
+        });
       });
-      console.log('after', this.roomMsgs);
       this.newRoom = '';
       this.addingRoom = false;
     },

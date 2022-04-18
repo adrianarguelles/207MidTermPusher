@@ -74,13 +74,14 @@ class ChatsController extends Controller
             $message->save();            
             */            
 
-            /*MessageSent event version takes the entire message obj
+            
             broadcast(new \App\Events\Message(
                 $message->user->name, 
+                $message->room_id,
                 $message->message,
                 $message->attachment_path))->toOthers();
-            */
-            broadcast(new MessageSent($message->load('user')))->toOthers();
+            
+            //broadcast(new MessageSent($message->load('user')))->toOthers();
 
             return ['status' => 'success', 'imageUrl' => asset($attachmentPath) ];
         }

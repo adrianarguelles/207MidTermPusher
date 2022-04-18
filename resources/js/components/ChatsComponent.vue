@@ -144,9 +144,7 @@
                 .listen('.message',(event) => {
                     let found;
                     for(const indx in this.roomMsgs){
-                        console.log(indx, this.roomMsgs[indx]);
                         for(const inx2 in this.roomMsgs[indx]){
-                            console.log(inx2, this.roomMsgs[indx][inx2]);
                             if(inx2 == 'room_id' && this.roomMsgs[indx][inx2]==event.room_id){
                                 found = indx;
                             }                       
@@ -251,29 +249,21 @@
             },            
             selectRoom: function(event){
                 this.activeRoom = event.target.id;
-                //alert(this.activeRoom);
             },
             createRoom(){
                 axios.post('newRoom', {
                     room_name: this.newRoom,
                 }).then(response => {
-                    this.chatrooms.unshift(response.data);
-                    
+                    this.chatrooms.unshift({
+                        room_id: response.data.id,
+                        room_name: response.data.room_name
+                    });
                     this.roomMsgs.push({
                         room_id: response.data.id,
                         room_name: response.data.room_name,
                         messages:[]
-                    });
-                    //this.fetchMessages();
-                    /*
-                    for(const indx in this.roomMsgs){
-                        console.log(indx, this.roomMsgs[indx]);
-                        for(const inx2 in this.roomMsgs[indx]){
-                            console.log(inx2, this.roomMsgs[indx][inx2]);                    
-                        }
-                    }*/             
+                    });           
                 });
-                console.log('after',this.roomMsgs);
                 this.newRoom = '';
                 this.addingRoom = false;             
             },
