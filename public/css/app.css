@@ -11576,6 +11576,37 @@ body {
   width: 100%;
 }
 
+.toLabel {
+  font-size: 1.2rem;
+  color: whitesmoke;
+  margin-left: 10px;
+  display: inline-block;
+  width: 30px;
+  text-align: left;
+}
+
+.imgTextLabel {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  background: #e06822;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.imgTextLabel input {
+  width: 100%;
+  padding: 10px 20px;
+  margin-left: 10px;
+  border: none;
+  outline: none;
+  border-radius: 15px;
+  font-size: 1em;
+  height: 40px;
+}
+
 .message .p {
   position: relative;
   right: 0;

@@ -12,7 +12,7 @@
                 <h4>{{ user.name }}<br> <span>{{user.email}}</span></h4>
                 
                 <ul class = "nav_icons">
-                    <li><ion-icon name="chatbubble-ellipses-outline"></ion-icon></li>
+                    <li><ion-icon name="chatbubble-ellipses-outline" onclick="toggleheaderleft()" id="headerToggle"></ion-icon></li>
                     <li><ion-icon name="create-outline"></ion-icon></li>
                 </ul>
             </div>
@@ -63,13 +63,29 @@
 
        <div class="col-8">
         <div class="rightSide">
-                <div class = "header">
+
+                <div class = "header" id="orig" style="display:flex">
                     <div class="imgText">
                         <div class = "userimg">
                             <img src = "https://via.placeholder.com/150" class="cover">
                         </div>
                         
                         <h4>Ali Seanard <br> <span>Online</span></h4>
+                    </div>
+                </div>
+
+                <!-- TOGGLE DISPLAY when ADD to Chat is Clicked -->
+                
+                <div class = "header" id="toBar" style="display:none">
+                    <div class="imgTextLabel">
+                        
+                        <label class="toLabel">To:</label> 
+                            <input
+                            type="text"
+                            name="contact"
+                            placeholder="Enter contact name or email..."
+                            />
+
                     </div>
                 </div>
             </div>  
@@ -132,6 +148,8 @@
         max-width: 15rem;
     }
 </style>
+
+
 
 <script>
     import FileUploadComponent from './FileUploadComponent.vue';
@@ -226,4 +244,7 @@
             }
         }
     }
+
+
 </script>
+
