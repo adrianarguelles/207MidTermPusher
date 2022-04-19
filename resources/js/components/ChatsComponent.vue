@@ -6,9 +6,10 @@
             <div class ="header">
                 <div class = "userimg">
                     <img src = "https://via.placeholder.com/150" class="cover">
-                </div>
                 
+                </div>
                 <h4>{{ user.name }}<br> <span>{{user.email}}</span></h4>
+                
                 <ul class = "nav_icons">
                     <li><ion-icon name="chatbubble-ellipses-outline"></ion-icon></li>
                     <li><ion-icon name="create-outline"></ion-icon></li>
