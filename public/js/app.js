@@ -5408,9 +5408,15 @@ __webpack_require__.r(__webpack_exports__);
         return u.id != user.id;
       });
     }).listen('.message', function (event) {
+      //check which room the message goes
       var found = _this.getTargetRoomIndex(event.room_id);
 
-      if (found == null) {
+      if (event.room_name == '' && found == null && event.new_member != _this.user.id) {
+        //no one is being added and user doesn't have the room
+        //message is not for the user
+        return;
+      } else if (event.room_name != '' && found == null && event.new_member == _this.user.id) {
+        //user is being added to the room
         _this.chatrooms.unshift({
           room_id: event.room_id,
           room_name: event.room_name
@@ -5420,18 +5426,36 @@ __webpack_require__.r(__webpack_exports__);
           room_id: event.room_id,
           room_name: event.room_name,
           messages: []
-        });
+        }); //this.activeRoom = event.room_id;
 
-        _this.activeRoom = event.room_id;
+
         found = _this.getTargetRoomIndex(event.room_id);
       }
 
-      _this.roomMsgs[found].messages.push({
-        user: {
-          name: event.username
-        },
-        message: event.message
-      });
+      if (found != null) {
+        //put the new message received in the right room
+        _this.roomMsgs[found].messages.push({
+          user: {
+            name: event.username
+          },
+          message: event.message
+        }); //move up the room with the new message
+
+
+        var found2 = null;
+
+        for (var indx in _this.chatrooms) {
+          if (_this.chatrooms[indx].room_id == event.room_id) {
+            found2 = indx;
+          }
+        }
+
+        var room = _this.chatrooms[found2];
+
+        _this.chatrooms.splice(found2, 1);
+
+        _this.chatrooms.unshift(room);
+      }
     }).listenForWhisper('typing', function (user) {
       _this.activeUser = user;
 
@@ -5457,12 +5481,8 @@ __webpack_require__.r(__webpack_exports__);
       chatWindow.scrollTop = chatWindow.scrollHeight;
     },
     sendMessage: function sendMessage() {
-      /* no chatroom version
-      this.messages.push({
-          user: this.user,
-          message: this.newMessage
-      });*/
-      //chatroom version to push new message to array
+      var _this3 = this;
+
       var found = this.getTargetRoomIndex(this.activeRoom);
       this.roomMsgs[found].messages.push({
         user: this.user,
@@ -5471,6 +5491,22 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('messages', {
         message: this.newMessage,
         room_id: this.activeRoom
+      }).then(function (response) {
+        if (response.data.status == 'success' && _this3.chatrooms.length > 1) {
+          var _found = null;
+
+          for (var indx in _this3.chatrooms) {
+            if (_this3.chatrooms[indx].room_id == _this3.activeRoom) {
+              _found = indx;
+            }
+          }
+
+          var room = _this3.chatrooms[_found];
+
+          _this3.chatrooms.splice(_found, 1);
+
+          _this3.chatrooms.unshift(room);
+        }
       });
       this.newMessage = '';
     },
@@ -5478,13 +5514,6 @@ __webpack_require__.r(__webpack_exports__);
       Echo.join('chat').whisper('typing', this.user);
     },
     handleAttachmentUpload: function handleAttachmentUpload(attachmentUrl) {
-      /*
-      this.messages.push({
-          user: this.user,
-          message: '',
-          attachment_path: attachmentUrl 
-      });
-      */
       var found = this.getTargetRoomIndex(this.activeRoom);
       this.roomMsgs[found].messages.push({
         user: this.user,
@@ -5492,15 +5521,13 @@ __webpack_require__.r(__webpack_exports__);
         attachment_path: attachmentUrl
       });
     },
-    //chatroom methods
     fetchChatrooms: function fetchChatrooms() {
-      var _this3 = this;
+      var _this4 = this;
 
-      //runs only when page is loaded
       axios.get('rooms').then(function (response) {
         if (response.data.length > 0) {
-          _this3.chatrooms = response.data;
-          _this3.activeRoom = _this3.chatrooms[0].room_id;
+          _this4.chatrooms = response.data;
+          _this4.activeRoom = _this4.chatrooms[0].room_id;
         }
       });
     },
@@ -5508,19 +5535,19 @@ __webpack_require__.r(__webpack_exports__);
       this.activeRoom = event.target.id;
     },
     createRoom: function createRoom() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.post('newRoom', {
         room_name: this.newRoom
       }).then(function (response) {
-        _this4.chatrooms.unshift({
+        _this5.chatrooms.unshift({
           room_id: response.data.id,
           room_name: response.data.room_name
         });
 
-        _this4.activeRoom = response.data.id;
+        _this5.activeRoom = response.data.id;
 
-        _this4.roomMsgs.unshift({
+        _this5.roomMsgs.unshift({
           room_id: response.data.id,
           room_name: response.data.room_name,
           messages: []

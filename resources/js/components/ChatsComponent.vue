@@ -133,7 +133,7 @@
             window.Echo.join('chat')
                 .here(user => {
                     this.users = user;
-                    this.fetchMessages(); 
+                    this.fetchMessages();
                 })
                 .joining(user => {
                     this.users.push(user);
@@ -142,8 +142,14 @@
                     this.users = this.users.filter(u => u.id != user.id);
                 })               
                 .listen('.message',(event) => {
-                    let found = this.getTargetRoomIndex(event.room_id);
-                    if(found == null){
+                    //check which room the message goes
+                    let found = this.getTargetRoomIndex(event.room_id);                                
+                    if(event.room_name == '' && found == null && event.new_member != this.user.id){
+                        //no one is being added and user doesn't have the room
+                        //message is not for the user
+                        return;
+                    }else if(event.room_name != '' && found == null && event.new_member == this.user.id){
+                        //user is being added to the room
                         this.chatrooms.unshift({
                             room_id: event.room_id,
                             room_name: event.room_name
@@ -153,13 +159,28 @@
                             room_name: event.room_name,
                             messages:[]
                         });
-                        this.activeRoom = event.room_id;
-                        found = this.getTargetRoomIndex(event.room_id);
+                        //this.activeRoom = event.room_id;
+                        found = this.getTargetRoomIndex(event.room_id);                        
                     }
-                    this.roomMsgs[found].messages.push({
-                        user: { name: event.username},
-                        message: event.message
-                    });         
+
+                    if(found != null){
+                        //put the new message received in the right room
+                        this.roomMsgs[found].messages.push({
+                            user: { name: event.username},
+                            message: event.message
+                        });
+                        //move up the room with the new message
+                        let found2 = null;
+                        for(const indx in this.chatrooms){
+                            if(this.chatrooms[indx].room_id==event.room_id){
+                                found2 = indx;
+                            }                     
+                        }
+                        let room = this.chatrooms[found2]
+                        this.chatrooms.splice(found2, 1);
+                        this.chatrooms.unshift(room);      
+                    }
+                 
                 })              
                 .listenForWhisper('typing', user => {
                    this.activeUser = user;
@@ -172,7 +193,6 @@
                        this.activeUser = false;
                    }, 3000);
                 });
-
         },
 
         methods: {
@@ -181,20 +201,11 @@
                     this.roomMsgs = response.data;
                 });
             },
-
             scrollToChatBottom() {
                 const chatWindow = document.getElementById('ChatWindow');
                 chatWindow.scrollTop = chatWindow.scrollHeight;
             },
-
             sendMessage(){
-                /* no chatroom version
-                this.messages.push({
-                    user: this.user,
-                    message: this.newMessage
-                });*/
-
-                //chatroom version to push new message to array
                 let found = this.getTargetRoomIndex(this.activeRoom);          
                 this.roomMsgs[found].messages.push({
                     user: this.user,
@@ -203,24 +214,26 @@
                 axios.post('messages', {
                     message: this.newMessage,
                     room_id: this.activeRoom
+                }).then(response => {
+                    if(response.data.status=='success' && this.chatrooms.length > 1){
+                        let found = null;
+                        for(const indx in this.chatrooms){
+                            if(this.chatrooms[indx].room_id==this.activeRoom){
+                                found = indx;
+                            }                     
+                        }
+                        let room = this.chatrooms[found]
+                        this.chatrooms.splice(found, 1);
+                        this.chatrooms.unshift(room);
+                    }
                 });
-
                 this.newMessage = '';
             },
-
             sendTypingEvent() {
                 Echo.join('chat')
                     .whisper('typing', this.user);
             },
-
             handleAttachmentUpload(attachmentUrl) {
-                /*
-                this.messages.push({
-                    user: this.user,
-                    message: '',
-                    attachment_path: attachmentUrl 
-                });
-                */
                 let found = this.getTargetRoomIndex(this.activeRoom);
                 this.roomMsgs[found].messages.push({
                     user: this.user,
@@ -228,8 +241,7 @@
                     attachment_path:attachmentUrl
                 });
             },
-            //chatroom methods
-            fetchChatrooms(){//runs only when page is loaded
+            fetchChatrooms(){
                 axios.get('rooms').then(response =>{
                     if(response.data.length > 0){
                         this.chatrooms = response.data;

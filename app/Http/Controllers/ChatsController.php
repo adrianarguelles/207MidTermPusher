@@ -28,8 +28,6 @@ class ChatsController extends Controller
 
     public function fetchMessages()
     {
-        //original
-        //return Message::with('user')->get();
         // chatrooms and messages in the room
         $chatrooms = Chatroom::leftJoin('members','members.room_id', '=', 'chatrooms.room_id')
         ->where('members.user_id', auth()->user()->id)
@@ -38,10 +36,18 @@ class ChatsController extends Controller
         if(count($chatrooms)){
             foreach($chatrooms as $result){
                 $msgs = Message::with('user')->where('room_id',$result->room_id)->get();
-                $roomMsgs[] = array('room_id'=> $result->room_id, 'room_name'=>$result->room_name, 'messages'=> $msgs);
+                foreach($msgs as $msg){
+                    $sentTime[] = $msg->sent_at;
+                }
+                $lastMsg = max($sentTime);
+                $unsortedRoomMsgs[] = array('room_id'=> $result->room_id, 'room_name'=>$result->room_name, 'last_msg'=> $lastMsg, 'messages'=> $msgs);
+                $rmLst[] = $lastMsg;
             }
-            //return Message::with('user')->get();
-            return $roomMsgs;  
+            arsort($rmLst);
+            foreach($rmLst as $ky => $rm){
+                $roomMsgs[] = $unsortedRoomMsgs[$ky];
+            }
+            return $roomMsgs;
         }else{
             return array();
         }
@@ -107,9 +113,21 @@ class ChatsController extends Controller
 
     }
     public function fetchChatrooms(){
-        $results = Chatroom::leftJoin('members','members.room_id', '=', 'chatrooms.room_id')
+        $chatrooms = Chatroom::leftJoin('members','members.room_id', '=', 'chatrooms.room_id')
         ->where('members.user_id', auth()->user()->id)->get();
-        return $results;
+        if(count($chatrooms)){
+            foreach($chatrooms as $result){
+                $msgs = Message::with('user')->where('room_id',$result->room_id)->max('sent_at');
+                $sentTime[] = $msgs;
+            }
+            arsort($sentTime);
+            foreach($sentTime as $ky => $rm){
+                $sortedRooms[] = $chatrooms[$ky];
+            }
+            return $sortedRooms;
+        }else{
+            return $chatrooms;
+        }
     }    
 
     public function addRoom(Request $request){
@@ -145,13 +163,39 @@ class ChatsController extends Controller
             $roomMsgs['room_id'],
             auth()->user()->name.' has added you',
             null,
-            $roomMsgs['room_name']))->toOthers();
+            $roomMsgs['room_name'],
+            $user[0]->id
+            ))->toOthers();
     }
 
     public function test(){
-        $user = User::where('email','test2@test.com')->get();
-        echo '<pre>';
-        var_dump($user[0]->id);
+        $chatrooms = Chatroom::leftJoin('members','members.room_id', '=', 'chatrooms.room_id')
+        ->where('members.user_id', auth()->user()->id)
+        ->get();
+    
+        if(count($chatrooms)){
+            foreach($chatrooms as $result){
+                $msgs = Message::with('user')->where('room_id',$result->room_id)->max('sent_at');
+                $sentTime[] = $msgs;
+            }
+            arsort($sentTime);
+            foreach($sentTime as $ky => $rm){
+                $roomMsgs[] = $chatrooms[$ky];
+            }
+            return $roomMsgs;
+        }else{
+            return array();
+        }
+        
+        
+        foreach($roomMsgs as $indx => $room){
+            echo $indx.' - '.$room->room_name.'<br>';
+        }
+        
+        echo '<pre>test';
+        var_dump($sentTime);
+        //var_dump($roomMsgs);
         echo '</pre>';
+        
     }
 }
