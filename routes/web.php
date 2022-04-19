@@ -44,3 +44,4 @@ Route::get('/chats', [ChatsController::class, 'index']);
 
 Route::get('/messages', [ChatsController::class, 'fetchMessages']);
 Route::post('/messages', [ChatsController::class, 'sendMessage']);
+
