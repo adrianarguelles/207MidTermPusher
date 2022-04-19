@@ -3,11 +3,12 @@
     <div class="row">
         <div class= "col-4">
 
-            <div class ="header">
+            <div class ="header" data-toggle="collapse">
                 <div class = "userimg">
                     <img src = "https://via.placeholder.com/150" class="cover">
                 
                 </div>
+                
                 <h4>{{ user.name }}<br> <span>{{user.email}}</span></h4>
                 
                 <ul class = "nav_icons">
@@ -77,7 +78,7 @@
                 
                     <div class="card-body chatboxfix p-0">
                         
-                            <ul class="list-unstyled" style="height:460px; overflow-y:scroll">
+                            <ul class="list-unstyled" style="height:565px; overflow-y:scroll">
                                 <li class="p-2" v-for="(message, index) in messages" :key="index" >
                                     <div class="message my_message">
                                         <span class="p"><strong> {{ message.user.name }} : </strong>

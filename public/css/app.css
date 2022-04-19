@@ -11293,13 +11293,12 @@ body {
   background: #e9edee;
   margin: auto auto;
   flex-direction: column;
-  justify-content: center;
 }
 
 /*HEADER AREA*/
 .header {
   position: relative;
-  widht: 100%;
+  width: 100%;
   height: 60px;
   background: #e06822;
   display: flex;
@@ -11331,6 +11330,7 @@ body {
 }
 
 .nav_icons {
+  position: relative;
   display: flex;
   margin-left: auto;
   gap: 30px;
@@ -11384,11 +11384,12 @@ body {
 /* CHAT ROOMS */
 .chatlist {
   position: relative;
-  height: 500px;
+  height: 600px;
   /*calc(100% - 100px); /*60 + 40 = 100*/
   overflow-y: auto;
   border: 1px solid lightgray;
   background: whitesmoke;
+  box-shadow: 0 10px 10px 0px rgba(0, 0, 0, 0.2), 0 10px 10px 0 rgba(0, 0, 0, 0.06);
 }
 
 .chatlist::-webkit-scrollbar-track {
@@ -11512,13 +11513,13 @@ body {
 
 .text-muted {
   margin-left: 10px;
-  margin-bottom: 15px;
   height: 10px;
 }
 
 .chatboxfix {
-  height: 500px;
+  height: 600px;
   background: whitesmoke;
+  box-shadow: 0 10px 10px 0px rgba(0, 0, 0, 0.2), 0 10px 10px 0 rgba(0, 0, 0, 0.06);
 }
 
 .imgText {
@@ -11554,6 +11555,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+  box-shadow: 0 10px 10px 0px rgba(0, 0, 0, 0.2), 0 10px 10px 0 rgba(0, 0, 0, 0.06);
 }
 
 .chatbox_input ion-icon {
@@ -11590,4 +11592,9 @@ body {
   border-radius: 10px;
   font-size: 1em;
   color: #1a9988;
+}
+
+
+.navbar-logo{
+    max-width: 200px;
 }

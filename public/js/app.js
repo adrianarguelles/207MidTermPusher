@@ -5400,6 +5400,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['user'],
@@ -35187,30 +35188,38 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col-4" }, [
-      _c("div", { staticClass: "header" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _c("h4", [
-          _vm._v(_vm._s(_vm.user.name)),
-          _c("br"),
+      _c(
+        "div",
+        { staticClass: "header", attrs: { "data-toggle": "collapse" } },
+        [
+          _vm._m(0),
           _vm._v(" "),
-          _c("span", [_vm._v(_vm._s(_vm.user.email))]),
-        ]),
-        _vm._v(" "),
-        _c("ul", { staticClass: "nav_icons" }, [
-          _c(
-            "li",
-            [
-              _c("ion-icon", {
-                attrs: { name: "chatbubble-ellipses-outline" },
-              }),
-            ],
-            1
-          ),
+          _c("h4", [
+            _vm._v(_vm._s(_vm.user.name)),
+            _c("br"),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(_vm.user.email))]),
+          ]),
           _vm._v(" "),
-          _c("li", [_c("ion-icon", { attrs: { name: "create-outline" } })], 1),
-        ]),
-      ]),
+          _c("ul", { staticClass: "nav_icons" }, [
+            _c(
+              "li",
+              [
+                _c("ion-icon", {
+                  attrs: { name: "chatbubble-ellipses-outline" },
+                }),
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "li",
+              [_c("ion-icon", { attrs: { name: "create-outline" } })],
+              1
+            ),
+          ]),
+        ]
+      ),
       _vm._v(" "),
       _vm._m(1),
       _vm._v(" "),
@@ -35226,7 +35235,7 @@ var render = function () {
             "ul",
             {
               staticClass: "list-unstyled",
-              staticStyle: { height: "460px", "overflow-y": "scroll" },
+              staticStyle: { height: "565px", "overflow-y": "scroll" },
             },
             _vm._l(_vm.messages, function (message, index) {
               return _c("li", { key: index, staticClass: "p-2" }, [

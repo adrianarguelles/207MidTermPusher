@@ -15,21 +15,23 @@ body{
 	background:  #e9edee;
 	margin:auto auto; 
 	flex-direction:column; 
-	justify-content:center;
-	
+
 }
+
+
 
 
 /*HEADER AREA*/
 .header{
 	position: relative;
-	widht: 100%;
+	width: 100%;
 	height: 60px;
 	background: #e06822;
 	display: flex;
 	align-items: center;
 	padding:  0 15px;
 	justify-content: left;
+	
 }
 
 
@@ -58,7 +60,7 @@ body{
 }
 
 .nav_icons{
-
+	position: relative;
 	display:  flex;
 	margin-left:auto;
   gap: 30px;
@@ -66,7 +68,7 @@ body{
 }
 
 .nav_icons li{
-	position:relative;
+	position: relative;
 	display: flex;
 	list-style:  none;
 	cursor: pointer;
@@ -87,7 +89,7 @@ body{
 	align-items: center;
 	padding: 10px 10px;
 	border-bottom: 1px solid rgba(0,0,0,0.06);
-
+	
 }
 
 .search_chat div{
@@ -120,10 +122,11 @@ body{
 
 .chatlist{
 	position: relative;
-	height: 500px;/*calc(100% - 100px); /*60 + 40 = 100*/
+	height: 600px;/*calc(100% - 100px); /*60 + 40 = 100*/
 	overflow-y:  auto;
 	border: 1px solid lightgray;
 	background:  whitesmoke;
+	box-shadow:  0 10px 10px 0px rgba(0,0,0,0.2),0 10px 10px 0 rgba(0,0,0,0.06);
 }
 
 .chatlist::-webkit-scrollbar-track {
@@ -263,13 +266,13 @@ body{
 
 .text-muted{
 	margin-left: 10px;
-	margin-bottom: 15px;
 	height:10px;
 }
 
 .chatboxfix{
-	height: 500px;
+	height: 600px;
 	background: whitesmoke;
+	box-shadow:  0 10px 10px 0px rgba(0,0,0,0.2),0 10px 10px 0 rgba(0,0,0,0.06);
 }
 
 .imgText
@@ -296,6 +299,7 @@ body{
 .chatBox {
 	
 	background: whitesmoke;
+	
 
 }
 
@@ -310,6 +314,7 @@ body{
 	justify-content: space-between;
 	align-items: center;
 	padding:10px;
+	box-shadow:  0 10px 10px 0px rgba(0,0,0,0.2),0 10px 10px 0 rgba(0,0,0,0.06);
 
 }
 
