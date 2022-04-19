@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Events\StatusLinked;
 use App\Events\Message;
 use App\Http\Controllers\ChatsController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -18,29 +19,13 @@ use Illuminate\Http\Response;
 |
 */
 
-// Route::get('/', function () {
-//     return view('index');
-// });
-
-Route::get('/login', function() {
-    return view('login');
-});
-
-Route::post('/send-message',function(Request $request){
-    event(
-        new Message(
-            $request->input('username'),
-            $request->input('message')
-        )
-    );
-    return ["success"=> true];
-});
-
 Auth::routes();
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::get('/chats', [ChatsController::class, 'index']);
+Route::get('/', [App\Http\Controllers\ChatsController::class, 'index'])->name('home');
 
 Route::get('/messages', [ChatsController::class, 'fetchMessages']);
 Route::post('/messages', [ChatsController::class, 'sendMessage']);
+
+Route::get('/edit-profile', [ProfileController::class, 'showTestPage']);
+Route::get('/profile', [ProfileController::class, 'getProfile']);
+Route::post('/profile', [ProfileController::class, 'updateProfile']);
