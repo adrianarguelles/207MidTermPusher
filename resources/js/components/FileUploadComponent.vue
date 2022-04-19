@@ -1,6 +1,8 @@
 <template>
-    <div>
-        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#FileUploadModal">Upload File</button>
+    <div class="UploadButton-container">
+        <button type="button" class="UploadButton" title="Upload Image" data-bs-toggle="modal" data-bs-target="#FileUploadModal">
+            <ion-icon name="attach-outline"></ion-icon>
+        </button>
 
         <!-- File Dialog Modal -->
         <div id="FileUploadModal" class="modal" tabindex="-1">
@@ -43,6 +45,20 @@
 </template>
 
 <style scoped>
+    .UploadButton {
+        /* cursor:  pointer; */
+        font-size:  2em;
+        max-height: min-content;
+        padding: 0;
+        color:  whitesmoke;
+        background: none;
+        border: none;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     .FileUploadModal-actions {
         display: flex;
         flex-flow: row nowrap;

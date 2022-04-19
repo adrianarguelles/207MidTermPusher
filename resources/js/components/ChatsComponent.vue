@@ -77,8 +77,9 @@
             <div class="card card-default">
                 
                     <div class="card-body chatboxfix p-0">
-                        
+
                             <ul class="list-unstyled" style="height:560px; overflow-y:scroll">
+
                                 <li class="p-2" v-for="(message, index) in messages" :key="index" >
                                     <div class="message my_message">
                                         <span class="p"><strong> {{ message.user.name }} : </strong>
@@ -103,7 +104,7 @@
 
                     <!--chat input-->
                     <div class="chatbox_input">
-                        <ion-icon name="attach-outline"><FileUploadComponent v-on:upload-success="handleAttachmentUpload"></FileUploadComponent></ion-icon>
+                        <FileUploadComponent v-on:upload-success="handleAttachmentUpload"></FileUploadComponent>
                         
                         <input
                             @keydown="sendTypingEvent"
@@ -196,7 +197,7 @@
             },
 
             scrollToChatBottom() {
-                const chatWindow = document.getElementById('ChatWindow');
+                const chatWindow = this.$refs.chatWindow;
                 chatWindow.scrollTop = chatWindow.scrollHeight;
             },
 
