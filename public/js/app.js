@@ -35235,7 +35235,7 @@ var render = function () {
             "ul",
             {
               staticClass: "list-unstyled",
-              staticStyle: { height: "565px", "overflow-y": "scroll" },
+              staticStyle: { height: "560px", "overflow-y": "scroll" },
             },
             _vm._l(_vm.messages, function (message, index) {
               return _c("li", { key: index, staticClass: "p-2" }, [
