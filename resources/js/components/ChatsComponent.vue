@@ -94,7 +94,7 @@
                 
                     <div class="card-body chatboxfix p-0">
 
-                            <ul class="list-unstyled" style="height:560px; overflow-y:scroll">
+                            <ul ref="chatWindow" class="list-unstyled" style="height:560px; overflow-y:scroll" v-chat-scroll>
 
                                 <li class="p-2" v-for="(message, index) in messages" :key="index" >
                                     <div class="message my_message">
