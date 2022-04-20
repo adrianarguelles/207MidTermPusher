@@ -51,13 +51,34 @@
 
                         <!-- Add Member Input -->
                         <div v-if="addingMember==true">
-                            <input
+                            <!-- Dropdown for Possible Members List -->
+                            <vue-multiselect
+                                :id="chatroom.room_id"
+                                v-model="newMemberInput"
+                                :options="newMemberDropdownOptions"
+                                :multiple="false"
+                                :block-keys="['Tab', 'Enter']"
+                                select-label=""
+                                deselect-label=""
+                                placeholder="Type in a name..."
+                                label="id"
+                                :show-label="false"
+                                track-by="id"
+                                :custom-label="(user) => `${user.first_name} ${user.last_name}`"
+                                @search-change="findUserNotInRoom"
+                                :loading="isMemberSearchLoading"
+                                @select="addMember">
+                                
+                                <template v-slot:caret><span></span></template>
+                            </vue-multiselect>
+
+                            <!-- <input
                                 @keyup.enter="addMember"
                                 v-model="newMemberEmail"
                                 type="text"
                                 name="memberAdd"
                                 placeholder="Enter email address..."
-                                class="form-control">                    
+                                class="form-control">                     -->
                         </div>
                         <div class="card-body p-0">
                             <ul id="ChatWindow" class="list-unstyled" style="height: 500px; overflow-y:scroll" v-chat-scroll>
@@ -146,14 +167,17 @@
                 
                 // Create room vairables
                 isSearchLoading: false,
-                newRoom: '', // Stores input value of new room
                 addingRoom: false,
                 newRoomMembers: [], // Stores members to be added to new room
                 userDropdownOptions: [], // List of available users who may be added to a room
 
                 // Add chat member variables
+                isMemberSearchLoading: false,
                 addingMember: false,      
-                newMemberEmail: '',
+                newMemberEmail: '', // Deprecated: Stores input value of new member
+                newMemberInput: null,
+                newMemberDropdownOptions: []
+
             }
         },
 
@@ -325,6 +349,34 @@
                 });
             },
 
+            findUserNotInRoom(nameQuery, roomId) {
+                if (nameQuery === '') {
+                    // Only send request if there is a search query
+                    this.newMemberDropdownOptions = [];
+                    return;
+                }
+
+                // Show the loading spinner
+                this.isMemberSearchLoading = true;
+                axios.get('/users', {
+                    params: {
+                        name: nameQuery,
+                        notInRoom: roomId
+                    }
+                })
+                .then(response => {
+                    // Set the result of the database query as the options
+                    this.newMemberDropdownOptions = response.data;
+                })
+                .catch(error => {
+                    // Unexpected error occurred, for now log to console
+                    console.error(error);
+                })
+                .finally(() => {
+                    this.isMemberSearchLoading = false;
+                });            
+            },
+
             createRoom(){
                 // Generate a room name
                 const roomName = this.newRoomMembers
@@ -357,18 +409,22 @@
                 this.newRoomMembers = [];
                 this.addingRoom = false;             
             },
-            addMember(){
+
+            addMember(newMember){
                 axios.post('addMember', {
-                    email: this.newMemberEmail,
+                    email: newMember.email,
                     room_id: this.activeRoom
                 });
+
+                // Inform the chatroom that a new member has been added
                 let found = this.getTargetRoomIndex(this.activeRoom);
                 this.roomMsgs[found].messages.push({
                 user: '',
-                message: this.newMemberEmail + ' has been added'
-                });                
+                message: newMember.first_name + ' ' + newMember.last_name + ' has been added'
+                });
+                
                 this.addingMember = false;
-                this.newMemberEmail='';
+                this.newMemberInput = null;
             },
             getTargetRoomIndex(targetRoom){
                 let found = null;
