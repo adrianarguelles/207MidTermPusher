@@ -2,17 +2,35 @@
    <div class="row">
         <div class="col-2">
             <div class="card card-default">
+                <!-- List of Chat Rooms -->
                 <div class="card-header">Chat rooms <span v-on:click="addingRoom = !addingRoom;">+++</span></div>
-                <div v-if="addingRoom==true">
-                    <input
-                        @keyup.enter="createRoom"
-                        v-model="newRoom"
-                        type="text"
-                        name="roomName"
-                        placeholder="Enter room name..."
-                        class="form-control">                        
+
+                <!-- Form for Adding Users -->
+                <div 
+                    v-if="addingRoom==true"
+                    @keyup.enter="createRoom()">
+                    <vue-multiselect
+                        v-model="newRoomMembers"
+                        :options="userDropdownOptions"
+                        :multiple="true"
+                        :block-keys="['Tab', 'Enter']"
+                        :hide-selected="true"
+                        select-label=""
+                        deselect-label=""
+                        placeholder="Type in a name..."
+                        :close-on-select="false"
+                        label="id"
+                        :show-label="false"
+                        track-by="id"
+                        :custom-label="(user) => `${user.first_name} ${user.last_name}`"
+                        @search-change="findUser"
+                        :loading="isSearchLoading">
+                        
+                        <template v-slot:caret><span></span></template>
+                    </vue-multiselect>
                 </div>               
                 <div class="card-body">
+                    <!-- Chatroom Selection Component -->
                     <ul v-if="chatrooms!=''">
                         <li class="py-2" v-for="(chatroom, index) in chatrooms" :key="index">
                             <span class="rooms" v-on:click="selectRoom" v-bind:id="chatroom.room_id" >{{chatroom.room_name}}</span>
@@ -24,11 +42,14 @@
         <div class="col-8">
             <div class="card card-default">
                 <div v-for="(chatroom, index) in roomMsgs" :key="index" >
+                    <!-- Chat Messages Window -->
                     <div class="roomMessages" v-bind:id="'messages_room' + chatroom.room_id" v-if="chatroom.room_id==activeRoom">
                         <div class="card-header">
                             {{chatroom.room_name}} Messages 
                             <span v-on:click="addingMember=!addingMember">+member</span>
                         </div>
+
+                        <!-- Add Member Input -->
                         <div v-if="addingMember==true">
                             <input
                                 @keyup.enter="addMember"
@@ -121,10 +142,18 @@
                 //chatroom variables
                 chatrooms: [],
                 activeRoom:'',
-                newRoom:'',
-                addingRoom:false,
-                addingMember:false,      
-                newMemberEmail:'',
+                currentUser: this.$props.user,
+                
+                // Create room vairables
+                isSearchLoading: false,
+                newRoom: '', // Stores input value of new room
+                addingRoom: false,
+                newRoomMembers: [], // Stores members to be added to new room
+                userDropdownOptions: [], // List of available users who may be added to a room
+
+                // Add chat member variables
+                addingMember: false,      
+                newMemberEmail: '',
             }
         },
 
@@ -252,9 +281,49 @@
             selectRoom: function(event){
                 this.activeRoom = event.target.id;
             },
+
+            // Function to query the database for a certain user
+            findUser(query) {
+                if (query === '') {
+                    // Only send request if there is a search query
+                    this.userDropdownOptions = [];
+                    return;
+                }
+
+                // Show the loading bar
+                this.isSearchLoading = true;
+                axios.get('/users', {
+                    params: {
+                        name: query
+                    }
+                })
+                .then(response => {
+                    // Set the result of the database query as the options
+                    this.userDropdownOptions = response.data;
+                })
+                .catch(error => {
+                    // Unexpected error occurred, for now log to console
+                    console.error(error);
+                })
+                .finally(() => {
+                    this.isSearchLoading = false;
+                });
+            },
+
             createRoom(){
-                axios.post('newRoom', {
-                    room_name: this.newRoom,
+                // Generate a room name
+                const roomName = this.newRoomMembers
+                    .concat(this.$props.user) // Include the current user
+                    .map(user => `${user.first_name} ${user.last_name}`)
+                    .join(', ');
+
+                // Get the selected members
+                const members = this.newRoomMembers.map(user => user.id);
+
+                // Make a request to create a new room
+                axios.post('/newRoom', {
+                    room_name: roomName,
+                    members: members
                 }).then(response => {
                     this.chatrooms.unshift({
                         room_id: response.data.id,
@@ -267,7 +336,9 @@
                         messages:[]
                     });      
                 });
-                this.newRoom = '';
+
+                // Reset state
+                this.newRoomMembers = [];
                 this.addingRoom = false;             
             },
             addMember(){

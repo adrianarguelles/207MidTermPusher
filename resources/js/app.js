@@ -24,6 +24,8 @@ Vue.use(VueChatScroll)
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('chats', require('./components/ChatsComponent.vue').default);
 Vue.component('profile-edit-form', require('./components/SampleProfileEditForm.vue').default);
+Vue.component('vue-multiselect', window.VueMultiselect.default)
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
