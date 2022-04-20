@@ -28,9 +28,9 @@ class ProfileController extends Controller
     public function searchProfile(Request $request) {
         $name = $request->input('name');
 
-        return User::where('first_name', 'like', $name . '%')
+        return User::where('id', '!=', auth()->user()->id)
+            ->where('first_name', 'like', $name . '%')
             ->orWhere('last_name', 'like', $name . '%')
-            ->where('id', '!=', auth()->user()->id)
             ->limit(15)
             ->get();
     }
