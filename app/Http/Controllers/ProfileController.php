@@ -37,15 +37,19 @@ class ProfileController extends Controller
             return User::whereDoesntHave('rooms', function (Builder $query) use ($roomId) {
                 $query->where('members.room_id', '=', $roomId);
             })->where('id', '!=', auth()->user()->id)
-            ->where('first_name', 'like', $name . '%')
-            ->orWhere('last_name', 'like', $name . '%')
+            ->where(function ($query) use ($name) {
+                $query->where('first_name', 'like', '%' . $name . '%');
+                $query->orWhere('last_name', 'like', '%' . $name . '%');
+            })
             ->limit(15)
             ->get();
         }
         else {
             return User::where('id', '!=', auth()->user()->id)
-                ->where('first_name', 'like', $name . '%')
-                ->orWhere('last_name', 'like', $name . '%')
+                ->where(function ($query) use ($name) {
+                    $query->where('first_name', 'like', '%' . $name . '%');
+                    $query->orWhere('last_name', 'like', '%' . $name . '%');
+                })
                 ->limit(15)
                 ->get();
         }

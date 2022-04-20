@@ -54,9 +54,7 @@
                             <!-- Dropdown for Possible Members List -->
                             <vue-multiselect
                                 :id="chatroom.room_id"
-                                v-model="newMemberInput"
                                 :options="newMemberDropdownOptions"
-                                :multiple="false"
                                 :block-keys="['Tab', 'Enter']"
                                 select-label=""
                                 deselect-label=""
@@ -67,7 +65,8 @@
                                 :custom-label="(user) => `${user.first_name} ${user.last_name}`"
                                 @search-change="findUserNotInRoom"
                                 :loading="isMemberSearchLoading"
-                                @select="addMember">
+                                @select="addMember"
+                                :reset-after="true">
                                 
                                 <template v-slot:caret><span></span></template>
                             </vue-multiselect>
@@ -173,8 +172,6 @@
                 // Add chat member variables
                 isMemberSearchLoading: false,
                 addingMember: false,      
-                newMemberEmail: '', // Deprecated: Stores input value of new member
-                newMemberInput: null,
                 newMemberDropdownOptions: []
 
             }
@@ -431,8 +428,8 @@
                 message: newMember.first_name + ' ' + newMember.last_name + ' has been added'
                 });
                 
+                this.newMemberDropdownOptions = [];
                 this.addingMember = false;
-                this.newMemberInput = null;
             },
             getTargetRoomIndex(targetRoom){
                 let found = null;
