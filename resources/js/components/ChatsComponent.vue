@@ -163,7 +163,6 @@
                 //chatroom variables
                 chatrooms: [],
                 activeRoom:'',
-                currentUser: this.$props.user,
                 
                 // Create room vairables
                 isSearchLoading: false,
@@ -195,19 +194,21 @@
                     this.users = this.users.filter(u => u.id != user.id);
                 })
                 .listen('.chatroom.created', (event) => {
-                    // Chatroom was created and user is added to it
-                    
                     // Add the chatroom created to the user's list of chatrooms
-                    this.chatrooms.unshift({
-                        room_id: event.chatRoom.room_id,
-                        room_name: event.chatRoom.room_name
-                    });
+                    
+                    // Only if they're a member of the chatroom
+                    if (event.chatRoom.members.some(member => member.id === this.$props.user.id)) {
+                        this.chatrooms.unshift({
+                            room_id: event.chatRoom.room_id,
+                            room_name: event.chatRoom.room_name
+                        });
 
-                    this.roomMsgs.unshift({
-                        room_id: event.chatRoom.room_id,
-                        room_name: event.chatRoom.room_name,
-                        messages: []
-                    });
+                        this.roomMsgs.unshift({
+                            room_id: event.chatRoom.room_id,
+                            room_name: event.chatRoom.room_name,
+                            messages: []
+                        });
+                    }
                 })
                 .listen('.message',(event) => {
                     //check which room the message goes

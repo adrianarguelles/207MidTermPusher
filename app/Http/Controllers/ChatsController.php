@@ -143,7 +143,7 @@ class ChatsController extends Controller
         $newRoom->members()->attach($request->members);
 
         // Inform others that a chatroom has been created
-        broadcast(new ChatroomCreated($newRoom))->toOthers();
+        broadcast(new ChatroomCreated($newRoom->load('members')))->toOthers();
         return $newRoom;
     }
 
