@@ -35,3 +35,4 @@ Route::get('/test', [ChatsController::class, 'test']);
 Route::get('/edit-profile', [ProfileController::class, 'showTestPage']);
 Route::get('/profile', [ProfileController::class, 'getProfile']);
 Route::post('/profile', [ProfileController::class, 'updateProfile']);
+Route::get('/users', [ProfileController::class, 'searchProfile']);

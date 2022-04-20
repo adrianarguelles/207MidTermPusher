@@ -20,6 +20,20 @@ class ProfileController extends Controller
     {
         return view('edit-profile-test');
     }
+    
+    /** 
+     * Finds a list of users whose full name matches thes search query, 
+     * excluding the currently logged-in user.
+     */ 
+    public function searchProfile(Request $request) {
+        $name = $request->input('name');
+
+        return User::where('first_name', 'like', $name . '%')
+            ->orWhere('last_name', 'like', $name . '%')
+            ->where('id', '!=', auth()->user()->id)
+            ->limit(15)
+            ->get();
+    }
 
     // Retrieves the current user's profile
     public function getProfile() {
