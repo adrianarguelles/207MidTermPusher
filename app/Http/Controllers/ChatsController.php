@@ -128,16 +128,18 @@ class ChatsController extends Controller
         }else{
             return $chatrooms;
         }
-    }    
+    }
 
-    public function addRoom(Request $request){
+    public function addRoom(Request $request) {
         $newRoom = new Chatroom;
         $newRoom->room_name = $request->room_name;
         $newRoom->save();
-        $firstMember = new Members;
-        $firstMember->room_id = $newRoom->id;
-        $firstMember->user_id = auth()->user()->id;
-        $firstMember->save();
+
+        // Add the currently logged in user
+        $newRoom->members()->attach(auth()->user()->id);
+        
+        // Add the new members to the room, assuming `members` is an array of user IDs 
+        $newRoom->members()->attach($request->members);
         return $newRoom;
     }
 
