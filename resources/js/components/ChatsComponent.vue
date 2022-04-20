@@ -109,7 +109,7 @@
                             class="form-control">
                     </div>
                     <div class="col-2">
-                        <FileUploadComponent v-on:upload-success="handleAttachmentUpload"></FileUploadComponent>
+                        <FileUploadComponent :active-room="activeRoom" v-on:upload-success="handleAttachmentUpload"></FileUploadComponent>
                     </div>                   
                 </div>
 
@@ -233,10 +233,17 @@
 
                     if(found != null){
                         //put the new message received in the right room
-                        this.roomMsgs[found].messages.push({
+                        let newMessage = {
                             user: { name: event.username},
                             message: event.message
-                        });
+                        };
+
+                        // Check if incoming has an attachment
+                        if (event.attachment_path) {
+                            newMessage.attachment_path = event.attachment_path;
+                        }
+
+                        this.roomMsgs[found].messages.push(newMessage);
                         //move up the room with the new message
                         let found2 = null;
                         for(const indx in this.chatrooms){

@@ -57,6 +57,8 @@
 
 <script>
 export default {
+    props: ['active-room'],
+
     emits: ['upload-success'],
 
     data() {
@@ -102,7 +104,7 @@ export default {
             // Prepare to send the file to the server
             let formData = new FormData();
             formData.append('attachment', this.attachmentFile, this.attachmentFile.name);
-
+            formData.append('room_id', this.$props.activeRoom);
             this.isUploading = true;
 
             // Send request to upload file to server
