@@ -6,6 +6,7 @@ use App\Models\Message;
 use Illuminate\Http\Request;
 //for the chatrooms
 use App\Models\Chatroom;
+use App\Events\ChatroomCreated;
 use App\Models\Members;
 use App\Events\MessageSent;
 use App\Models\User;
@@ -140,6 +141,9 @@ class ChatsController extends Controller
         
         // Add the new members to the room, assuming `members` is an array of user IDs 
         $newRoom->members()->attach($request->members);
+
+        // Inform others that a chatroom has been created
+        broadcast(new ChatroomCreated($newRoom))->toOthers();
         return $newRoom;
     }
 

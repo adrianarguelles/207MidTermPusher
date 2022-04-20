@@ -159,7 +159,7 @@
 
         created() {
             this.fetchChatrooms();
-            window.Echo.join('chat')
+            Echo.join('chat')
                 .here(user => {
                     this.users = user;
                     this.fetchMessages();
@@ -169,7 +169,22 @@
                 })
                 .leaving(user => {
                     this.users = this.users.filter(u => u.id != user.id);
-                })               
+                })
+                .listen('.chatroom.created', (event) => {
+                    // Chatroom was created and user is added to it
+                    
+                    // Add the chatroom created to the user's list of chatrooms
+                    this.chatrooms.unshift({
+                        room_id: event.chatRoom.room_id,
+                        room_name: event.chatRoom.room_name
+                    });
+
+                    this.roomMsgs.unshift({
+                        room_id: event.chatRoom.room_id,
+                        room_name: event.chatRoom.room_name,
+                        messages: []
+                    });
+                })
                 .listen('.message',(event) => {
                     //check which room the message goes
                     let found = this.getTargetRoomIndex(event.room_id);                                
@@ -325,13 +340,14 @@
                     room_name: roomName,
                     members: members
                 }).then(response => {
+                    // Upon successful addition, add the new chatroom to the list
                     this.chatrooms.unshift({
-                        room_id: response.data.id,
+                        room_id: response.data.room_id,
                         room_name: response.data.room_name
                     });
-                    this.activeRoom = response.data.id;
+                    this.activeRoom = response.data.room_id;
                     this.roomMsgs.unshift({
-                        room_id: response.data.id,
+                        room_id: response.data.room_id,
                         room_name: response.data.room_name,
                         messages:[]
                     });      
