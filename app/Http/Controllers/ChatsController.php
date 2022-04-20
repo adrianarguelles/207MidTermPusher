@@ -39,7 +39,7 @@ class ChatsController extends Controller
                 foreach($msgs as $msg){
                     $sentTime[] = $msg->sent_at;
                 }
-                $lastMsg = max($sentTime);
+                $lastMsg = count($msgs) > 0 ? max($sentTime) : 0;
                 $unsortedRoomMsgs[] = array('room_id'=> $result->room_id, 'room_name'=>$result->room_name, 'last_msg'=> $lastMsg, 'messages'=> $msgs);
                 $rmLst[] = $lastMsg;
             }
