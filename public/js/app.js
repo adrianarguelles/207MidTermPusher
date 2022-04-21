@@ -35326,7 +35326,7 @@ var render = function () {
         [
           _vm._m(0),
           _vm._v(" "),
-          _c("h4", [
+          _c("h4", { staticClass: "userName" }, [
             _vm._v(_vm._s(_vm.user.name)),
             _c("br"),
             _vm._v(" "),
@@ -35370,6 +35370,8 @@ var render = function () {
           _c(
             "ul",
             {
+              directives: [{ name: "chat-scroll", rawName: "v-chat-scroll" }],
+              ref: "chatWindow",
               staticClass: "list-unstyled",
               staticStyle: { height: "560px", "overflow-y": "scroll" },
             },

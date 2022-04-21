@@ -9,7 +9,7 @@
                 
                 </div>
                 
-                <h4>{{ user.name }}<br> <span>{{user.email}}</span></h4>
+                <h4 class="userName">{{ user.name }}<br> <span>{{user.email}}</span></h4>
                 
                 <ul class = "nav_icons">
                     <li><ion-icon name="chatbubble-ellipses-outline" onclick="toggleheaderleft()" id="headerToggle"></ion-icon></li>
@@ -62,7 +62,7 @@
         </div>
 
        <div class="col-8">
-        <div class="rightSide">
+            <div class="rightSide">
 
                 <div class = "header" id="orig" style="display:flex">
                     <div class="imgText">
