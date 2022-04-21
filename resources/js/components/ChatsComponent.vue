@@ -1,25 +1,127 @@
 <template>
-   <div class="row">
-       <div class="col-8">
-           <div class="card card-default">
-               <div class="card-header">Messages</div>
-               <div class="card-body p-0">
-                   <ul id="ChatWindow" class="list-unstyled" style="height: 500px; overflow-y:scroll" v-chat-scroll>
-                       <li class="p-2" v-for="(message, index) in messages" :key="index" >
-                           <div>
-                                <strong>{{ message.user.name }}</strong>
-                                {{ message.message }}
-                           </div>
-                           <div v-if="message.attachment_path">
-                               <!-- Attachment -->
-                               <img class="img-thumbnail" :src="message.attachment_path" @load="scrollToChatBottom">
-                           </div>
-                       </li>
-                   </ul>
-               </div>
+    
+    <div class="row">
+        <div class= "col-4">
 
-               <div class="row">
-                   <div class="col-10">
+            <div class ="header" data-toggle="collapse">
+                <div class = "userimg">
+                    <img src = "https://via.placeholder.com/150" class="cover">
+                
+                </div>
+                
+                <h4>{{ user.name }}<br> <span>{{user.email}}</span></h4>
+                
+                <ul class = "nav_icons">
+                    <li><ion-icon name="chatbubble-ellipses-outline" onclick="toggleheaderleft()" id="headerToggle"></ion-icon></li>
+                    <li><ion-icon name="create-outline"></ion-icon></li>
+                </ul>
+            </div>
+
+            <!-- search -->
+
+            <div class = "search_chat">
+                <div>
+                    <input type="text" placeholder="Search or start a new chat"> 
+                </div>
+            </div>
+
+            <!-- chatlist -->
+
+            <div class="chatlist" style="overflow-y:scroll">
+        
+                <div class="block active">
+                    <div class="details">
+                        <div class="listHead">
+                            <h4>Ali Seanard</h4>
+                            <p class="time">10:23</p>
+                        </div>
+                    
+                    
+                        <div class="message_p">
+                            <p>The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- FROM ORIG FILE/ DON'T WANT TO MESS WITH THIS MUNA SORRY
+
+            
+            <div class="card card-default">
+                <div class="card-header">Active Users</div>
+                    <div class="card-body">
+                        <ul>
+                            <li class="py-2" v-for="(user, index) in users" :key="index">
+                                {{ user.name }}
+                            </li>
+                        </ul>
+                    </div>
+                
+            </div>-->
+        </div>
+
+       <div class="col-8">
+        <div class="rightSide">
+
+                <div class = "header" id="orig" style="display:flex">
+                    <div class="imgText">
+                        <div class = "userimg">
+                            <img src = "https://via.placeholder.com/150" class="cover">
+                        </div>
+                        
+                        <h4>Ali Seanard <br> <span>Online</span></h4>
+                    </div>
+                </div>
+
+                <!-- TOGGLE DISPLAY when ADD to Chat is Clicked -->
+                
+                <div class = "header" id="toBar" style="display:none">
+                    <div class="imgTextLabel">
+                        
+                        <label class="toLabel">To:</label> 
+                            <input
+                            type="text"
+                            name="contact"
+                            placeholder="Enter contact name or email..."
+                            />
+
+                    </div>
+                </div>
+            </div>  
+
+            <div class="card card-default">
+                
+                    <div class="card-body chatboxfix p-0">
+
+                            <ul ref="chatWindow" class="list-unstyled" style="height:560px; overflow-y:scroll" v-chat-scroll>
+
+                                <li class="p-2" v-for="(message, index) in messages" :key="index" >
+                                    <div class="message my_message">
+                                        <span class="p"><strong> {{ message.user.name }} : </strong>
+                                        {{ message.message }}</span>
+                                    </div>
+                                
+                                    <div v-if="message.attachment_path">
+                                        <!-- Attachment -->
+                                        <img class="img-thumbnail" :src="message.attachment_path" @load="scrollToChatBottom">
+                                    </div>
+
+                                </li>
+                                
+                                
+                                
+                            </ul>
+                            <span class="text-muted" v-if="activeUser" >{{ activeUser.name }} is typing...</span>
+                        
+                    </div>
+                    
+                    
+
+                    <!--chat input-->
+                    <div class="chatbox_input">
+                        <FileUploadComponent v-on:upload-success="handleAttachmentUpload"></FileUploadComponent>
+                        
                         <input
                             @keydown="sendTypingEvent"
                             @keyup.enter="sendMessage"
@@ -28,29 +130,17 @@
                             name="message"
                             placeholder="Enter your message..."
                             class="form-control">
+
                     </div>
-                    <div class="col-2">
-                        <FileUploadComponent v-on:upload-success="handleAttachmentUpload"></FileUploadComponent>
-                    </div>                   
-               </div>
+                   
 
-           </div>
-            <span class="text-muted" v-if="activeUser" >{{ activeUser.name }} is typing...</span>
-       </div>
-
-        <div class="col-4">
-            <div class="card card-default">
-                <div class="card-header">Active Users</div>
-                <div class="card-body">
-                    <ul>
-                        <li class="py-2" v-for="(user, index) in users" :key="index">
-                            {{ user.name }}
-                        </li>
-                    </ul>
                 </div>
-            </div>
-        </div>
+                
+           </div>
+
+
    </div>
+
 </template>
 
 <style scoped>
@@ -58,6 +148,8 @@
         max-width: 15rem;
     }
 </style>
+
+
 
 <script>
     import FileUploadComponent from './FileUploadComponent.vue';
@@ -123,7 +215,7 @@
             },
 
             scrollToChatBottom() {
-                const chatWindow = document.getElementById('ChatWindow');
+                const chatWindow = this.$refs.chatWindow;
                 chatWindow.scrollTop = chatWindow.scrollHeight;
             },
 
@@ -152,4 +244,7 @@
             }
         }
     }
+
+
 </script>
+
