@@ -6,10 +6,7 @@
                     <div class="card-header">Example Component</div>
 
                     <div class="card-body">
-                        <div>{{content}}</div>
-
-                        <p>The button below has been clicked {{clicks}} times!</p>
-                        <button class="btn btn-primary" @click="clicks++">+1</button>
+                        I'm an example component.
                     </div>
                 </div>
             </div>
@@ -19,12 +16,6 @@
 
 <script>
     export default {
-        data() {
-            return {
-                clicks: 0,
-                content: "I'm an example component made in Vue."
-            }
-        },
         mounted() {
             console.log('Component mounted.')
         }
