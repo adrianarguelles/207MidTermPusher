@@ -98,7 +98,7 @@
 
                                 <li class="p-2" v-for="(message, index) in messages" :key="index" >
                                     <div class="message my_message">
-                                        <span class="p"><strong> {{ message.user.name }} : </strong>
+                                        <span class="p" style="text-align: left;"><strong> {{ message.user.name }} : </strong>
                                         {{ message.message }}</span>
                                     </div>
                                 

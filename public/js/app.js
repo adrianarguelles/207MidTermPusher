@@ -5732,7 +5732,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5808,6 +5807,7 @@ __webpack_require__.r(__webpack_exports__);
         alert('Profile successfully updated!'); // You can get data from the server via the `response.data` object.
         // e.g., response.data.profilePicture contains a URL to the newly updated profile picture
       });
+      window.location.reload();
     }
   }
 });
@@ -35472,15 +35472,19 @@ var render = function () {
             _vm._l(_vm.messages, function (message, index) {
               return _c("li", { key: index, staticClass: "p-2" }, [
                 _c("div", { staticClass: "message my_message" }, [
-                  _c("span", { staticClass: "p" }, [
-                    _c("strong", [
-                      _vm._v(" " + _vm._s(message.user.name) + " : "),
-                    ]),
-                    _vm._v(
-                      "\n                                     " +
-                        _vm._s(message.message)
-                    ),
-                  ]),
+                  _c(
+                    "span",
+                    { staticClass: "p", staticStyle: { "text-align": "left" } },
+                    [
+                      _c("strong", [
+                        _vm._v(" " + _vm._s(message.user.name) + " : "),
+                      ]),
+                      _vm._v(
+                        "\n                                     " +
+                          _vm._s(message.message)
+                      ),
+                    ]
+                  ),
                 ]),
                 _vm._v(" "),
                 message.attachment_path
@@ -36041,7 +36045,10 @@ var render = function () {
                   _vm._v(" "),
                   _c(
                     "button",
-                    { staticClass: "btn", attrs: { type: "submit" } },
+                    {
+                      staticClass: "btn",
+                      attrs: { type: "submit", "data-bs-dismiss": "modal" },
+                    },
                     [_vm._v("Save")]
                   ),
                 ]
