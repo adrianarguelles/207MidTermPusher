@@ -6,7 +6,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <link rel="icon" href="{{ asset('safetynet.png') }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
@@ -19,13 +19,19 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+
 </head>
+
+
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar shadow-none navbar-expand-md navbar-light navbar-default">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    <!--{{ config('app.name', 'Laravel') }}-->
+
+                    <img class="navbar-logo" src="{{ asset('safetyNet_full.png') }}">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -80,5 +86,33 @@
             @yield('content')
         </main>
     </div>
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+<script>
+    function toggleheaderleft() {
+    
+    var origHeader = document.getElementById('orig');
+    var toBar = document.getElementById('toBar');
+    
+    var displaySetting = origHeader.style.display;
+
+    var button = document.getElementById('headerToggle').addEventListener("click", toggleheaderleft);;
+
+    
+    if (displaySetting == 'flex') {
+      
+      origHeader.style.display = 'none';
+      toBar.style.display='flex';
+    }
+    else {
+      origHeader.style.display = 'flex';
+      toBar.style.display='none';
+      
+    }
+  }
+</script>
 </body>
 </html>

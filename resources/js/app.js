@@ -36,3 +36,26 @@ Vue.component('vue-multiselect', window.VueMultiselect.default)
 const app = new Vue({
     el: '#app',
 });
+
+
+function toggleheaderleft() {
+    
+    var origHeader = document.getElementById('orig');
+    var toBar = document.getElementById('toBar');
+    
+    var displaySetting = origHeader.style.display;
+
+    var button = document.getElementById('headerToggle').addEventListener("click", hello);;
+
+    
+    if (displaySetting == 'flex') {
+      
+      origHeader.style.display = 'none';
+      toBar.style.display='flex';
+    }
+    else {
+      origHeader.style.display = 'flex';
+      toBar.style.display='none';
+      
+    }
+  }
