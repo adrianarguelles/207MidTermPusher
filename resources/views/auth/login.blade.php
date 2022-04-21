@@ -7,8 +7,8 @@
     <div class="row justify-content-center">
         <div class="col-md-5">
             <div class="card my-auto shadow login">
-                <div class="header cardheader">{{ __('Login') }}</div>
-
+                <div><span class="cardheader">{{ __('Login') }}</span><br/><span class="subtitle">Have an account? Enter your credentials</span></div>
+                
                 <div class="card-body login">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf

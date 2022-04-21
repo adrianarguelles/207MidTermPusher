@@ -11308,28 +11308,35 @@ body {
 }
 
 .cardheader {
-  color: whitesmoke;
+  color: #e06822;
   font-size: 1.5rem;
   font-weight: 600;
+  margin-left: 20px;
+}
+
+.subtitle {
+  color: #e06822;
+  font-size: 0.9rem;
+  margin-left: 20px;
 }
 
 .labelLogin {
   font-size: 1rem;
-  color: whitesmoke;
+  color: #e06822;
   margin-left: 10px;
   width: 150px;
 }
 
 .login {
-  background: #e06822;
+  background: #e9edee;
   border: none;
   padding: 15px 15px;
   justify-content: left;
 }
 
 .loginbutton {
-  background-color: whitesmoke;
-  color: black;
+  background-color: #e06822;
+  color: whitesmoke;
   border: none;
   border-radius: 10px;
   padding: 5px;
