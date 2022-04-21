@@ -112,6 +112,12 @@ body{
 	border-radius: 50%;
 }
 
+.userimg > .cover {
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+}
+
 .header h4{
 	
 	font-size: 1.3em;
