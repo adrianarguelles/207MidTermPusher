@@ -13,7 +13,7 @@
                 
                 <ul class = "nav_icons">
                     <li><ion-icon name="chatbubble-ellipses-outline" onclick="toggleheaderleft()" id="headerToggle"></ion-icon></li>
-                    <li><ion-icon name="create-outline"></ion-icon></li>
+                    <li><SampleProfileEditForm></SampleProfileEditForm></li>
                 </ul>
             </div>
 
@@ -153,12 +153,14 @@
 
 <script>
     import FileUploadComponent from './FileUploadComponent.vue';
+    import SampleProfileEditForm from './SampleProfileEditForm.vue';
 
     export default {
         props:['user'],
 
         components: {
-            FileUploadComponent
+            FileUploadComponent,
+            SampleProfileEditForm
         },
 
         data() {
