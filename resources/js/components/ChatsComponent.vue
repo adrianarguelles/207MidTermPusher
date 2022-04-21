@@ -3,7 +3,7 @@
     <div class="col-4">
       <div class="header" data-toggle="collapse">
         <div class="userimg">
-          <img src="https://via.placeholder.com/150" class="cover" />
+          <img :src="user.profile_picture || 'http://placekitten.com/150/150'" class="cover" />
         </div>
 
         <h4>
