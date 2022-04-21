@@ -13,6 +13,7 @@
 
         <ul class="nav_icons">
           <li>
+            <!-- TODO: To-bar should close upon room creation -->
             <ion-icon
               name="chatbubble-ellipses-outline"
               onclick="toggleheaderleft()"
@@ -54,7 +55,7 @@
     <div class="chatlist" style="overflow-y: scroll">
       <!-- TODO: `active` should be present if room is the active room -->
       <div
-        class="block active"
+        class="block"
         v-for="chatroom in chatrooms"
         :key="chatroom.room_id"
       >
@@ -176,6 +177,7 @@
           <!--chat input-->
           <div class="chatbox_input">
             <FileUploadComponent
+            :active-room="activeRoom"
               v-on:upload-success="handleAttachmentUpload"
             ></FileUploadComponent>
 
