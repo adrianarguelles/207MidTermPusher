@@ -125,13 +125,6 @@
                 >
                   <template v-slot:caret><span></span></template>
                 </vue-multiselect>
-
-                <!-- <label class="toLabel">To:</label> 
-                                  <input
-                                  type="text"
-                                  name="contact"
-                                  placeholder="Enter contact name or email..."
-                                  /> -->
               </div>
             </div>
           </div>
@@ -538,6 +531,9 @@ export default {
       }
       return found;
     },
+
+    // Given a message object, converts it to a string resembling a chat message
+    // This is used for the chat rooms list message preview
     convertMessageObjectToString(message) {
       if (!message) return "";
 
