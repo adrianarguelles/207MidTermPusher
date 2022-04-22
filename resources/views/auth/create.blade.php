@@ -26,6 +26,11 @@
     </div>
 
     <div class="form-group">
+    <label for="profile_picture">Profile Picture:</label>
+    <input type="profile_picture" class="form-control" id="profile_picture" name="profile_picture">
+    </div>
+
+    <div class="form-group">
     <label for="password">Password:</label>
     <input type="password" class="form-control" id="password" name="password">
     </div>
