@@ -8,6 +8,9 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use Illuminate\Contracts\BindingResolutionException;
+
 
 class RegisterController extends Controller
 {
@@ -47,12 +50,15 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    public function validator(array $data)
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'profile_picture' => ['image', 'size:4096']
         ]);
     }
 
@@ -62,12 +68,23 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create(array $data)
+    public function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $newUser = new User;
+        $newUser->name = $data['name'];
+        $newUser->first_name = $data['first_name'];
+        $newUser->last_name = $data['last_name'];
+        $newUser->email = $data['email'];
+        $newUser->password = Hash::make($data['password']);
+        
+        // Receive the file via the app request object
+        $request = app('request');
+        if ($request->hasFile('profile_picture')) {
+            $profilePicture = $request->file('profile_picture')->store('images', 'public');
+            $newUser->profile_picture = $profilePicture;
+        }
+
+        $newUser->save();
+        return $newUser;
     }
 }
