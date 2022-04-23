@@ -21,7 +21,7 @@ window.Vue = require('vue').default;
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('chats', require('./components/ChatsComponent.vue').default);
-Vue.component('profile-edit-form', require('./components/SampleProfileEditForm.vue').default);
+Vue.component('profile-edit-form', require('./components/ProfileUpdateComponent.vue').default);
 
 /** Loading any external Vue plugins */
 import VueChatScroll from 'vue-chat-scroll'

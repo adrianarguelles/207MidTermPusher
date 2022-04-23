@@ -20,7 +20,7 @@
                                 <img v-if="currentProfilePicture !== null" class="img-thumbnail" style="width:100px;height:100px; object-fit:cover; border-radius:100px;" :src="currentProfilePicture" alt="Profile picture">
                                 <p v-else-if="currentProfilePicture === null">No profile picture.</p></div>
                                 <div class="changeImageWrap">
-                                    <label class="changeImage" for="profilepicture">Change Profile Pic</label>
+                                    <label class="changeImage" for="profilepicture">Change Profile Picture</label>
                                     <input type="file" name="profilepicture" id="profilepicture" @change="onFileChange($event)">
                                 </div>
                             </section>
@@ -35,10 +35,10 @@
                                 <input class="form-control" type="text" name="lastname" id="lastname" v-model="lastName">
                             </div>
 
-                            <div> 
+                            <!-- <div> 
                                 <label for="email">E-mail</label>
                                 <input class="form-control" type="text" name="email" id="email" v-model="email">
-                            </div>
+                            </div> -->
 
                             <!-- This part shows error messages if there are any -->
                             <div class="text-danger">
@@ -46,8 +46,7 @@
                                     {{error}}
                                 </div>
                             </div>
-
-                            <button type="submit" class="btn">Save</button>
+                            <button type="submit" class="btn" data-bs-dismiss="modal">Save</button>
                         </form>
                     </div>
                 </div>
@@ -62,7 +61,7 @@
             return {
                 firstName: '',
                 lastName: '',
-                email: '',
+                // email: '',
                 currentProfilePicture: '',
                 profilePicture: null,
                 errors: []
@@ -74,8 +73,7 @@
                 .then(response => {                    
                     this.firstName = response.data.firstName;
                     this.lastName = response.data.lastName;
-                    this.email = response.data.email;
-
+                    // this.email = response.data.email;
                     this.currentProfilePicture = response.data.profilePicture;
                 });
         },
@@ -92,9 +90,9 @@
                     this.errors.push('Please enter a last name.');
                 }
 
-                if (this.email.length === 0) {
-                    this.errors.push('Please enter an email address.');
-                }
+                // if (this.email.length === 0) {
+                //     this.errors.push('Please enter an email address.');
+                // }
             },
 
             // Sets the data.profilePicture whenever the selected file changes
@@ -123,7 +121,7 @@
                 let formData = new FormData();
                 formData.append('firstName', this.firstName);
                 formData.append('lastName', this.lastName);
-                formData.append('email', this.email);
+                // formData.append('email', this.email);
 
                 // Append to form data only if the user uploaded a profile picture file
                 if (this.profilePicture) {
@@ -139,13 +137,14 @@
                         // You can get data from the server via the `response.data` object.
 
                         // e.g., response.data.profilePicture contains a URL to the newly updated profile picture
-                    });
+                    }
+                );
+                window.location.reload()
+
             }
         }
     }
 </script>
-
- </script>
 
 <style scoped>
 
