@@ -96,8 +96,25 @@
 
                             <ul ref="chatWindow" class="list-unstyled" style="height:560px; overflow-y:scroll" v-chat-scroll>
 
+                                <!-- LOGGED IN USER MESSAGES -->
+
                                 <li class="p-2" v-for="(message, index) in messages" :key="index" >
                                     <div class="message my_message">
+                                        <span class="p" style="text-align: left;"><strong> {{ message.user.name }} : </strong>
+                                        {{ message.message }}</span>
+                                    </div>
+                                
+                                    <div v-if="message.attachment_path">
+                                        <!-- Attachment -->
+                                        <img class="img-thumbnail" :src="message.attachment_path" @load="scrollToChatBottom">
+                                    </div>
+
+                                </li>
+
+                                <!-- OTHER PEOPLE MESSAGES -->
+
+                                <li class="p-2" v-for="(message, index) in messages" :key="index" >
+                                    <div class="message friend_message">
                                         <span class="p" style="text-align: left;"><strong> {{ message.user.name }} : </strong>
                                         {{ message.message }}</span>
                                     </div>
