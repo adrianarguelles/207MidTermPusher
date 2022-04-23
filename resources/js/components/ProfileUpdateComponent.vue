@@ -132,14 +132,12 @@
                     .then(response => {
                         // Code in this part is run when the profile was updated successfully.
                         
-                        alert('Profile successfully updated!');
-
+                        window.location.reload()
                         // You can get data from the server via the `response.data` object.
 
                         // e.g., response.data.profilePicture contains a URL to the newly updated profile picture
                     }
                 );
-                window.location.reload()
 
             }
         }
