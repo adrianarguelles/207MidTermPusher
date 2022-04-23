@@ -83,7 +83,7 @@ class ChatsController extends Controller
 
             
             broadcast(new \App\Events\Message(
-                $message->user->name, 
+                $message->user, 
                 $message->room_id,
                 $message->message,
                 $message->attachment_path))->toOthers();
@@ -101,7 +101,7 @@ class ChatsController extends Controller
             ]);
             
             broadcast(new \App\Events\Message(
-                $message->user->name,
+                $message->user,
                 $message->room_id,
                 $message->message, null))->toOthers();
             

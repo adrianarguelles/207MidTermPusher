@@ -23,7 +23,7 @@ Vue.use(VueChatScroll)
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('chats', require('./components/ChatsComponent.vue').default);
-Vue.component('profile-edit-form', require('./components/SampleProfileEditForm.vue').default);
+Vue.component('profile-edit-form', require('./components/ProfileUpdateComponent.vue').default);
 Vue.component('vue-multiselect', window.VueMultiselect.default)
 
 
