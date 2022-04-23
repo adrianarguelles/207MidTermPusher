@@ -13,7 +13,7 @@ use Illuminate\Queue\SerializesModels;
 class Message implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $username;
+    public $user;
     public $room_id;
     public $message;
     public $attachment_path;
@@ -24,9 +24,9 @@ class Message implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($username, $room_id, $message, $attachment, $room_name = '',$new_member='')
+    public function __construct($user, $room_id, $message, $attachment, $room_name = '',$new_member='')
     {
-        $this->username = $username;
+        $this->user = $user;
         $this->room_id = $room_id;
         $this->message = $message;
         $this->attachment_path = $attachment;

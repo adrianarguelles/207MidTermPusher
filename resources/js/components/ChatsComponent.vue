@@ -68,7 +68,7 @@
 
           <!-- The message last sent to the room -->
           <div class="message_p">
-            <p v-if="roomMsgs.find(room => room.room_id === chatroom.room_id).messages.length > 0">
+            <p v-if="roomMsgs.find(room => room.room_id == chatroom.room_id).messages.length > 0">
               {{
                 // Get the last message and convert to string
                 convertMessageObjectToString(
@@ -83,55 +83,61 @@
     </div>
 
     <div class="col-8">
-      <div v-for="(chatroom, index) in roomMsgs" :key="index">
-        <div
-          class="roomMessages"
-          v-bind:id="'messages_room' + chatroom.room_id"
-          v-if="chatroom.room_id == activeRoom"
-        >
-          <div class="rightSide">
-            <div class="header" id="orig" :style="{ display: !addingRoom ? 'flex' : 'none' }">
-              <div class="imgText">
-                <!-- TODO: Default Room Photo -->
-                <!-- <div class="userimg">
-                  <img src="https://via.placeholder.com/150" class="cover" />
-                </div> -->
-                <!-- TODO: Consider showing photo if chatroom is 1-on-1 -->
+        <div class="rightSide">
+          <div class="header" id="orig" :style="{ display: !addingRoom ? 'flex' : 'none' }">
+            <div class="imgText">
+              <!-- TODO: Default Room Photo -->
+              <!-- <div class="userimg">
+                <img src="https://via.placeholder.com/150" class="cover" />
+              </div> -->
+              <!-- TODO: Consider showing photo if chatroom is 1-on-1 -->
 
-                <h4>{{ chatroom.room_name }}</h4>
-              </div>
-            </div>
-
-            <!-- TOGGLE DISPLAY when ADD to Chat is Clicked -->
-
-            <div class="header" id="toBar" :style="{ display: addingRoom ? 'flex' : 'none' }">
-              <div class="imgTextLabel" @keyup.enter="createRoom()">
-                <vue-multiselect
-                  v-model="newRoomMembers"
-                  :options="userDropdownOptions"
-                  :multiple="true"
-                  :block-keys="['Tab', 'Enter']"
-                  :hide-selected="true"
-                  select-label=""
-                  deselect-label=""
-                  placeholder="Type in a name..."
-                  :close-on-select="false"
-                  label="id"
-                  :show-label="false"
-                  track-by="id"
-                  :custom-label="(user) => `${user.first_name} ${user.last_name}`"
-                  @search-change="findUser"
-                  :loading="isSearchLoading"
-                >
-                  <template v-slot:caret><span></span></template>
-                </vue-multiselect>
-              </div>
+              <h4 v-if="activeRoomDetails">
+                {{ activeRoomDetails.room_name }}
+              </h4>
             </div>
           </div>
 
-          <div class="card card-default">
+          <!-- TOGGLE DISPLAY when ADD to Chat is Clicked -->
+
+          <div class="header" id="toBar" :style="{ display: addingRoom ? 'flex' : 'none' }">
+            <div class="imgTextLabel" @keyup.enter="createRoom()">
+              <vue-multiselect
+                v-model="newRoomMembers"
+                :options="userDropdownOptions"
+                :multiple="true"
+                :block-keys="['Tab', 'Enter']"
+                :hide-selected="true"
+                select-label=""
+                deselect-label=""
+                placeholder="Type in a name..."
+                :close-on-select="false"
+                label="id"
+                :show-label="false"
+                track-by="id"
+                :custom-label="(user) => `${user.first_name} ${user.last_name}`"
+                @search-change="findUser"
+                :loading="isSearchLoading"
+              >
+                <template v-slot:caret><span></span></template>
+              </vue-multiselect>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-default">
+          <!-- Placeholder chat box (if there are no rooms yet) -->
+         <div v-if="roomMsgs.length === 0" class="card-body chatboxfix p-4">
+           <div class="d-flex justify-content-center align-items-center h-100">
+                <p class="fs-3 text-muted">Click on the bubble icon <ion-icon name="chatbubble-ellipses-outline"></ion-icon> above, and then press <strong>enter</strong> to create a new chatroom!</p>
+              </div>
+         </div>
+
+          <div v-for="chatroom in roomMsgs" :key="chatroom.room_id">
             <!-- Chat messages and 'is typing...' -->
-            <div class="card-body chatboxfix p-0">
+            <div class="card-body chatboxfix p-0 roomMessages" 
+              v-bind:id="'messages_room' + chatroom.room_id" 
+              v-if="chatroom.room_id == activeRoom">
               <ul
                 v-if="!addingRoom"
                 ref="chatWindow"
@@ -172,29 +178,27 @@
                 >{{ activeUser.name }} is typing...</span
               >
             </div>
+          </div>
 
-            <!--chat input-->
-            <div class="chatbox_input">
-              <FileUploadComponent
-              :active-room="activeRoom"
-                v-on:upload-success="handleAttachmentUpload"
-              ></FileUploadComponent>
+          <!--chat input-->
+          <div class="chatbox_input">
+            <FileUploadComponent
+            :active-room="activeRoom"
+              v-on:upload-success="handleAttachmentUpload"
+            ></FileUploadComponent>
 
-              <input
-                @keydown="sendTypingEvent"
-                @keyup.enter="sendMessage"
-                v-model="newMessage"
-                type="text"
-                name="message"
-                placeholder="Enter your message..."
-                class="form-control"
-              />
-            </div>
+            <input
+              @keydown="sendTypingEvent"
+              @keyup.enter="sendMessage"
+              v-model="newMessage"
+              type="text"
+              name="message"
+              placeholder="Enter your message..."
+              class="form-control"
+            />
           </div>
         </div>
       </div>
-
-    </div>
   </div>
 </template>
 
@@ -243,6 +247,19 @@ export default {
       addingMember: false,
       newMemberDropdownOptions: [],
     };
+  },
+
+  computed: {
+    activeRoomDetails: function() {
+      const activeRoomResult = this.roomMsgs.filter(room => room.room_id == this.activeRoom);
+
+      if (activeRoomResult.length === 0) {
+        return null;
+      }
+      else {
+        return activeRoomResult[0];
+      }
+    }
   },
 
   created() {
@@ -312,9 +329,13 @@ export default {
         if (found != null) {
           //put the new message received in the right room
           let newMessage = {
-            user: { name: event.username },
+            user: event.user,
             message: event.message,
           };
+          console.log("Event");
+          console.log(event);
+          console.log("New Message");
+          console.log(newMessage);
 
           // Check if incoming has an attachment
           if (event.attachment_path) {
