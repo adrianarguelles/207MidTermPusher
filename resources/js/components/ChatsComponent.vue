@@ -161,10 +161,14 @@
                       {{ message.message }}
                     </span>
                   </div>
-                  <div v-if="message.attachment_path">
+                  <div v-if="message.attachment_path" :class="{
+                    message: true, 
+                    my_message: message.user.id === user.id,
+                    friend_message: message.user.id !== user.id
+                  }">
                     <!-- Attachment -->
                     <img
-                      class="img-thumbnail"
+                      class="img-thumbnail p"
                       :src="message.attachment_path"
                       @load="scrollToChatBottom"
                     />
