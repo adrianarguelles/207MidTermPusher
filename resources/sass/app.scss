@@ -7,15 +7,12 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+// Vue MultiSelect Styling
+@import url('https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css');
 
 body{
-	dislay:  flex;
-	justify-content: center;
-	align-items: center;
 	background:  #e9edee;
 	margin:auto auto; 
-	flex-direction:column; 
-
 }
 
 

@@ -5383,6 +5383,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+<<<<<<< HEAD
+=======
 //
 //
 //
@@ -5438,6 +5440,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+>>>>>>> master-websocket
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5448,20 +5451,34 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      messages: [],
+      roomMsgs: [],
+
+      /*roomMsgs replaces messages
+      structure based on ChatsController:
+      $roomMsgs[] = array('room_id'=> $result->room_id, 'room_name'=>$result->room_name, 'messages'=> $msgs);
+      */
+      //messages: [],
       newMessage: '',
       users: [],
       activeUser: false,
-      typingTimer: false
+      typingTimer: false,
+      //chatroom variables
+      chatrooms: [],
+      activeRoom: '',
+      newRoom: '',
+      addingRoom: false,
+      addingMember: false,
+      newMemberEmail: ''
     };
   },
   created: function created() {
     var _this = this;
 
+    this.fetchChatrooms();
     window.Echo.join('chat').here(function (user) {
-      _this.fetchMessages();
-
       _this.users = user;
+
+      _this.fetchMessages();
     }).joining(function (user) {
       _this.users.push(user);
     }).leaving(function (user) {
@@ -5469,15 +5486,54 @@ __webpack_require__.r(__webpack_exports__);
         return u.id != user.id;
       });
     }).listen('.message', function (event) {
-      console.log(event);
+      //check which room the message goes
+      var found = _this.getTargetRoomIndex(event.room_id);
 
-      _this.messages.push({
-        user: {
-          name: event.username
-        },
-        message: event.message,
-        attachment_path: event.attachment_path
-      });
+      if (event.room_name == '' && found == null && event.new_member != _this.user.id) {
+        //no one is being added and user doesn't have the room
+        //message is not for the user
+        return;
+      } else if (event.room_name != '' && found == null && event.new_member == _this.user.id) {
+        //user is being added to the room
+        _this.chatrooms.unshift({
+          room_id: event.room_id,
+          room_name: event.room_name
+        });
+
+        _this.roomMsgs.unshift({
+          room_id: event.room_id,
+          room_name: event.room_name,
+          messages: []
+        }); //this.activeRoom = event.room_id;
+
+
+        found = _this.getTargetRoomIndex(event.room_id);
+      }
+
+      if (found != null) {
+        //put the new message received in the right room
+        _this.roomMsgs[found].messages.push({
+          user: {
+            name: event.username
+          },
+          message: event.message
+        }); //move up the room with the new message
+
+
+        var found2 = null;
+
+        for (var indx in _this.chatrooms) {
+          if (_this.chatrooms[indx].room_id == event.room_id) {
+            found2 = indx;
+          }
+        }
+
+        var room = _this.chatrooms[found2];
+
+        _this.chatrooms.splice(found2, 1);
+
+        _this.chatrooms.unshift(room);
+      }
     }).listenForWhisper('typing', function (user) {
       _this.activeUser = user;
 
@@ -5495,7 +5551,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.get('messages').then(function (response) {
-        _this2.messages = response.data;
+        _this2.roomMsgs = response.data;
       });
     },
     scrollToChatBottom: function scrollToChatBottom() {
@@ -5503,12 +5559,32 @@ __webpack_require__.r(__webpack_exports__);
       chatWindow.scrollTop = chatWindow.scrollHeight;
     },
     sendMessage: function sendMessage() {
-      this.messages.push({
+      var _this3 = this;
+
+      var found = this.getTargetRoomIndex(this.activeRoom);
+      this.roomMsgs[found].messages.push({
         user: this.user,
         message: this.newMessage
       });
       axios.post('messages', {
-        message: this.newMessage
+        message: this.newMessage,
+        room_id: this.activeRoom
+      }).then(function (response) {
+        if (response.data.status == 'success' && _this3.chatrooms.length > 1) {
+          var _found = null;
+
+          for (var indx in _this3.chatrooms) {
+            if (_this3.chatrooms[indx].room_id == _this3.activeRoom) {
+              _found = indx;
+            }
+          }
+
+          var room = _this3.chatrooms[_found];
+
+          _this3.chatrooms.splice(_found, 1);
+
+          _this3.chatrooms.unshift(room);
+        }
       });
       this.newMessage = '';
     },
@@ -5516,11 +5592,71 @@ __webpack_require__.r(__webpack_exports__);
       Echo.join('chat').whisper('typing', this.user);
     },
     handleAttachmentUpload: function handleAttachmentUpload(attachmentUrl) {
-      this.messages.push({
+      var found = this.getTargetRoomIndex(this.activeRoom);
+      this.roomMsgs[found].messages.push({
         user: this.user,
         message: '',
         attachment_path: attachmentUrl
       });
+    },
+    fetchChatrooms: function fetchChatrooms() {
+      var _this4 = this;
+
+      axios.get('rooms').then(function (response) {
+        if (response.data.length > 0) {
+          _this4.chatrooms = response.data;
+          _this4.activeRoom = _this4.chatrooms[0].room_id;
+        }
+      });
+    },
+    selectRoom: function selectRoom(event) {
+      this.activeRoom = event.target.id;
+    },
+    createRoom: function createRoom() {
+      var _this5 = this;
+
+      axios.post('newRoom', {
+        room_name: this.newRoom
+      }).then(function (response) {
+        _this5.chatrooms.unshift({
+          room_id: response.data.id,
+          room_name: response.data.room_name
+        });
+
+        _this5.activeRoom = response.data.id;
+
+        _this5.roomMsgs.unshift({
+          room_id: response.data.id,
+          room_name: response.data.room_name,
+          messages: []
+        });
+      });
+      this.newRoom = '';
+      this.addingRoom = false;
+    },
+    addMember: function addMember() {
+      axios.post('addMember', {
+        email: this.newMemberEmail,
+        room_id: this.activeRoom
+      });
+      var found = this.getTargetRoomIndex(this.activeRoom);
+      this.roomMsgs[found].messages.push({
+        user: '',
+        message: this.newMemberEmail + ' has been added'
+      });
+      this.addingMember = false;
+      this.newMemberEmail = '';
+    },
+    getTargetRoomIndex: function getTargetRoomIndex(targetRoom) {
+      var found = null;
+
+      for (var indx in this.roomMsgs) {
+        if (this.roomMsgs[indx].room_id == targetRoom) {
+          found = indx;
+        }
+      }
+
+      return found;
     }
   }
 });
@@ -5848,6 +5984,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js")["default"]);
+
+Vue.use((vue_chat_scroll__WEBPACK_IMPORTED_MODULE_0___default()));
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -5905,7 +6043,7 @@ __webpack_require__.r(__webpack_exports__);
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 
 try {
-  window.bootstrap = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
+  __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
 } catch (e) {}
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -5930,7 +6068,12 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   wsHost: window.location.hostname,
   wsPort: "6001",
   forceTLS: false,
+  wsHost: window.location.hostname,
+  wsPort: 6001,
   disableStats: true
+});
+window.Echo.channel('DemoChannel').listen('WebsocketDemoEvent', function (e) {
+  console.log(e);
 });
 
 /***/ }),
@@ -35433,6 +35576,12 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
+<<<<<<< HEAD
+    _c("div", { staticClass: "col-2" }, [
+      _c("div", { staticClass: "card card-default" }, [
+        _c("div", { staticClass: "card-header" }, [
+          _vm._v("Chat rooms "),
+=======
     _c("div", { staticClass: "col-4" }, [
       _c(
         "div",
@@ -35477,11 +35626,24 @@ var render = function () {
       _vm._v(" "),
       _c("div", { staticClass: "card card-default" }, [
         _c("div", { staticClass: "card-body chatboxfix p-0" }, [
+>>>>>>> master-websocket
           _c(
-            "ul",
+            "span",
             {
+<<<<<<< HEAD
               directives: [{ name: "chat-scroll", rawName: "v-chat-scroll" }],
               ref: "chatWindow",
+=======
+<<<<<<< HEAD
+              on: {
+                click: function ($event) {
+                  _vm.addingRoom = !_vm.addingRoom
+                },
+              },
+            },
+            [_vm._v("+++")]
+=======
+>>>>>>> master-websocket
               staticClass: "list-unstyled",
               staticStyle: { height: "560px", "overflow-y": "scroll" },
             },
@@ -35506,6 +35668,7 @@ var render = function () {
                       ]
                     ),
                   ]),
+<<<<<<< HEAD
                   _vm._v(" "),
                   message.attachment_path
                     ? _c("div", [
@@ -35553,6 +35716,23 @@ var render = function () {
               }),
             ],
             2
+=======
+                ]),
+                _vm._v(" "),
+                message.attachment_path
+                  ? _c("div", [
+                      _c("img", {
+                        staticClass: "img-thumbnail",
+                        attrs: { src: message.attachment_path },
+                        on: { load: _vm.scrollToChatBottom },
+                      }),
+                    ])
+                  : _vm._e(),
+              ])
+            }),
+            0
+>>>>>>> master-websocket
+>>>>>>> master-websocket
           ),
           _vm._v(" "),
           _vm.activeUser
@@ -35562,6 +35742,24 @@ var render = function () {
             : _vm._e(),
         ]),
         _vm._v(" "),
+<<<<<<< HEAD
+        _vm.addingRoom == true
+          ? _c("div", [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.newRoom,
+                    expression: "newRoom",
+                  },
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  name: "roomName",
+                  placeholder: "Enter room name...",
+=======
         _c(
           "div",
           { staticClass: "chatbox_input" },
@@ -35577,26 +35775,266 @@ var render = function () {
                   rawName: "v-model",
                   value: _vm.newMessage,
                   expression: "newMessage",
+>>>>>>> master-websocket
                 },
+                domProps: { value: _vm.newRoom },
+                on: {
+                  keyup: function ($event) {
+                    if (
+                      !$event.type.indexOf("key") &&
+                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                    ) {
+                      return null
+                    }
+                    return _vm.createRoom.apply(null, arguments)
+                  },
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.newRoom = $event.target.value
+                  },
+                },
+<<<<<<< HEAD
+              }),
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _vm.chatrooms != ""
+            ? _c(
+                "ul",
+                _vm._l(_vm.chatrooms, function (chatroom, index) {
+                  return _c("li", { key: index, staticClass: "py-2" }, [
+                    _c(
+                      "span",
+                      {
+                        staticClass: "rooms",
+                        attrs: { id: chatroom.room_id },
+                        on: { click: _vm.selectRoom },
+                      },
+                      [_vm._v(_vm._s(chatroom.room_name))]
+                    ),
+                  ])
+                }),
+                0
+              )
+            : _vm._e(),
+        ]),
+      ]),
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-8" }, [
+      _c(
+        "div",
+        { staticClass: "card card-default" },
+        [
+          _vm._l(_vm.roomMsgs, function (chatroom, index) {
+            return _c("div", { key: index }, [
+              chatroom.room_id == _vm.activeRoom
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "roomMessages",
+                      attrs: { id: "messages_room" + chatroom.room_id },
+                    },
+                    [
+                      _c("div", { staticClass: "card-header" }, [
+                        _vm._v(
+                          "\n                         " +
+                            _vm._s(chatroom.room_name) +
+                            " Messages \n                         "
+                        ),
+                        _c(
+                          "span",
+                          {
+                            on: {
+                              click: function ($event) {
+                                _vm.addingMember = !_vm.addingMember
+                              },
+                            },
+                          },
+                          [_vm._v("+member")]
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _vm.addingMember == true
+                        ? _c("div", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.newMemberEmail,
+                                  expression: "newMemberEmail",
+                                },
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                name: "memberAdd",
+                                placeholder: "Enter email address...",
+                              },
+                              domProps: { value: _vm.newMemberEmail },
+                              on: {
+                                keyup: function ($event) {
+                                  if (
+                                    !$event.type.indexOf("key") &&
+                                    _vm._k(
+                                      $event.keyCode,
+                                      "enter",
+                                      13,
+                                      $event.key,
+                                      "Enter"
+                                    )
+                                  ) {
+                                    return null
+                                  }
+                                  return _vm.addMember.apply(null, arguments)
+                                },
+                                input: function ($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.newMemberEmail = $event.target.value
+                                },
+                              },
+                            }),
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "card-body p-0" }, [
+                        _c(
+                          "ul",
+                          {
+                            directives: [
+                              { name: "chat-scroll", rawName: "v-chat-scroll" },
+                            ],
+                            staticClass: "list-unstyled",
+                            staticStyle: {
+                              height: "500px",
+                              "overflow-y": "scroll",
+                            },
+                            attrs: { id: "ChatWindow" },
+                          },
+                          _vm._l(chatroom.messages, function (message, index) {
+                            return _c(
+                              "li",
+                              { key: index, staticClass: "p-2" },
+                              [
+                                _c("div", [
+                                  _c("strong", [
+                                    _vm._v(_vm._s(message.user.name)),
+                                  ]),
+                                  _vm._v(
+                                    "\n                                         " +
+                                      _vm._s(message.message) +
+                                      "\n                                 "
+                                  ),
+                                ]),
+                                _vm._v(" "),
+                                message.attachment_path
+                                  ? _c("div", [
+                                      _c("img", {
+                                        staticClass: "img-thumbnail",
+                                        attrs: { src: message.attachment_path },
+                                        on: { load: _vm.scrollToChatBottom },
+                                      }),
+                                    ])
+                                  : _vm._e(),
+                              ]
+                            )
+                          }),
+                          0
+                        ),
+                      ]),
+                    ]
+                  )
+                : _vm._e(),
+            ])
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-10" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.newMessage,
+                    expression: "newMessage",
+                  },
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  name: "message",
+                  placeholder: "Enter your message...",
+                },
+                domProps: { value: _vm.newMessage },
+                on: {
+                  keydown: _vm.sendTypingEvent,
+                  keyup: function ($event) {
+                    if (
+                      !$event.type.indexOf("key") &&
+                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                    ) {
+                      return null
+                    }
+                    return _vm.sendMessage.apply(null, arguments)
+                  },
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.newMessage = $event.target.value
+                  },
+                },
+              }),
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col-2" },
+              [
+                _c("FileUploadComponent", {
+                  on: { "upload-success": _vm.handleAttachmentUpload },
+                }),
               ],
-              staticClass: "form-control",
-              attrs: {
-                type: "text",
-                name: "message",
-                placeholder: "Enter your message...",
-              },
-              domProps: { value: _vm.newMessage },
-              on: {
-                keydown: _vm.sendTypingEvent,
-                keyup: function ($event) {
-                  if (
-                    !$event.type.indexOf("key") &&
-                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-                  ) {
-                    return null
-                  }
-                  return _vm.sendMessage.apply(null, arguments)
-                },
+              1
+            ),
+          ]),
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _vm.activeUser
+        ? _c("span", { staticClass: "text-muted" }, [
+            _vm._v(_vm._s(_vm.activeUser.name) + " is typing..."),
+          ])
+        : _vm._e(),
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-2" }, [
+      _c("div", { staticClass: "card card-default" }, [
+        _c("div", { staticClass: "card-header" }, [_vm._v("Active Users")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c(
+            "ul",
+            _vm._l(_vm.users, function (user, index) {
+              return _c("li", { key: index, staticClass: "py-2" }, [
+                _vm._v(
+                  "\n                         " +
+                    _vm._s(user.name) +
+                    "\n                     "
+                ),
+              ])
+            }),
+            0
+          ),
+        ]),
+=======
                 input: function ($event) {
                   if ($event.target.composing) {
                     return
@@ -35608,6 +36046,7 @@ var render = function () {
           ],
           1
         ),
+>>>>>>> master-websocket
       ]),
     ]),
   ])
@@ -48275,7 +48714,15 @@ Vue.compile = compileToFunctions;
 /***/ ((module) => {
 
 "use strict";
+<<<<<<< HEAD
 module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://axios-http.com","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"jsdelivr":"dist/axios.min.js","unpkg":"dist/axios.min.js","typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.14.0"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}]}');
+=======
+<<<<<<< HEAD
+module.exports = JSON.parse('{"_args":[["axios@0.21.4","D:\\\\php\\\\chattest"]],"_development":true,"_from":"axios@0.21.4","_id":"axios@0.21.4","_inBundle":false,"_integrity":"sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"axios@0.21.4","name":"axios","escapedName":"axios","rawSpec":"0.21.4","saveSpec":null,"fetchSpec":"0.21.4"},"_requiredBy":["#DEV:/"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.21.4.tgz","_spec":"0.21.4","_where":"D:\\\\php\\\\chattest","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"^1.14.0"},"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"homepage":"https://axios-http.com","jsdelivr":"dist/axios.min.js","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","unpkg":"dist/axios.min.js","version":"0.21.4"}');
+=======
+module.exports = JSON.parse('{"_args":[["axios@0.21.4","C:\\\\Users\\\\Karla Malla\\\\Documents\\\\GitHub\\\\207MidTermPusher"]],"_development":true,"_from":"axios@0.21.4","_id":"axios@0.21.4","_inBundle":false,"_integrity":"sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"axios@0.21.4","name":"axios","escapedName":"axios","rawSpec":"0.21.4","saveSpec":null,"fetchSpec":"0.21.4"},"_requiredBy":["#DEV:/"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.21.4.tgz","_spec":"0.21.4","_where":"C:\\\\Users\\\\Karla Malla\\\\Documents\\\\GitHub\\\\207MidTermPusher","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"^1.14.0"},"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"homepage":"https://axios-http.com","jsdelivr":"dist/axios.min.js","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","unpkg":"dist/axios.min.js","version":"0.21.4"}');
+>>>>>>> master-websocket
+>>>>>>> master-websocket
 
 /***/ })
 

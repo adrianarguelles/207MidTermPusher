@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Manages user profile-related logic like updating of profile pictures and names.
@@ -19,6 +20,39 @@ class ProfileController extends Controller
     public function showTestPage()
     {
         return view('edit-profile-test');
+    }
+    
+    /** 
+     * Finds a list of users whose full name matches thes search query, 
+     * excluding the currently logged-in user.
+     */ 
+    public function searchProfile(Request $request) {
+        $name = $request->input('name');
+
+        // Check if additional 'notInRoom' filter is requested
+        if ($request->filled('notInRoom')) {
+            $roomId = $request->input('notInRoom');
+
+            // Only get users not in the roomId
+            return User::whereDoesntHave('rooms', function (Builder $query) use ($roomId) {
+                $query->where('members.room_id', '=', $roomId);
+            })->where('id', '!=', auth()->user()->id)
+            ->where(function ($query) use ($name) {
+                $query->where('first_name', 'like', '%' . $name . '%');
+                $query->orWhere('last_name', 'like', '%' . $name . '%');
+            })
+            ->limit(15)
+            ->get();
+        }
+        else {
+            return User::where('id', '!=', auth()->user()->id)
+                ->where(function ($query) use ($name) {
+                    $query->where('first_name', 'like', '%' . $name . '%');
+                    $query->orWhere('last_name', 'like', '%' . $name . '%');
+                })
+                ->limit(15)
+                ->get();
+        }
     }
 
     // Retrieves the current user's profile

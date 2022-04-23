@@ -26,6 +26,13 @@ Route::get('/', [App\Http\Controllers\ChatsController::class, 'index'])->name('h
 Route::get('/messages', [ChatsController::class, 'fetchMessages']);
 Route::post('/messages', [ChatsController::class, 'sendMessage']);
 
+//adrian chatroom addition
+Route::get('/rooms', [App\Http\Controllers\ChatsController::class, 'fetchChatrooms']);
+Route::post('/newRoom', [ChatsController::class, 'addRoom']);
+Route::post('/addMember', [ChatsController::class, 'addMember']);
+Route::get('/test', [ChatsController::class, 'test']);
+
 Route::get('/edit-profile', [ProfileController::class, 'showTestPage']);
 Route::get('/profile', [ProfileController::class, 'getProfile']);
 Route::post('/profile', [ProfileController::class, 'updateProfile']);
+Route::get('/users', [ProfileController::class, 'searchProfile']);

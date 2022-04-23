@@ -10,6 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
+    <script src="https://unpkg.com/vue-multiselect@2.1.0"></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
