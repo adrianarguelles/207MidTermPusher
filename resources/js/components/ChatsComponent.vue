@@ -19,7 +19,7 @@
               id="headerToggle"
             ></ion-icon>
           </li>
-          <li><ion-icon name="create-outline"></ion-icon></li>
+          <li><ProfileUpdateComponent></ProfileUpdateComponent></li>
         </ul>
       </div>
 
@@ -151,7 +151,11 @@
                   :key="index"
                 >
                   <!-- TODO: Differentiate messages you sent -->
-                  <div class="message my_message">
+                  <div :class="{
+                    message: true, 
+                    my_message: message.user.id === user.id,
+                    friend_message: message.user.id !== user.id
+                  }">
                     <span class="p">
                       <strong v-if="message.user.id !== user.id"> {{ message.user.first_name }} {{ message.user.last_name }} : </strong>
                       {{ message.message }}
@@ -210,14 +214,16 @@
 
 
 <script>
-import FileUploadComponent from "./FileUploadComponent.vue";
+    import FileUploadComponent from './FileUploadComponent.vue';
+    import ProfileUpdateComponent from './ProfileUpdateComponent.vue';
 
 export default {
   props: ["user"],
 
-  components: {
-    FileUploadComponent,
-  },
+        components: {
+            FileUploadComponent,
+            ProfileUpdateComponent
+        },
 
   data() {
     return {
