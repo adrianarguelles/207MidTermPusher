@@ -61,7 +61,7 @@
                             <div class="col-md-6">
                                 <input id="profile_picture" type="file" class="form-control @error('profile_picture') is-invalid @enderror" name="profile_picture">
 
-                                @error('email')
+                                @error('profile_picture')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
