@@ -29,7 +29,7 @@
                             <label for="first_name" class="col-md-4 col-form-label text-md-end labelRegister">{{ __('First Name') }}</label>
 
                             <div class="col-md-6">
-                                <input id="first_name" type="text" class="form-control" name="first_name" >
+                                <input id="first_name" type="text" class=" logintext form-control" name="first_name" >
                             </div>
                         </div>
 
@@ -37,7 +37,7 @@
                             <label for="last_name" class="col-md-4 col-form-label text-md-end labelRegister">{{ __('Last Name') }}</label>
                          
                             <div class="col-md-6">
-                                <input id="last_name" type="text" class="form-control" name="last_name" >
+                                <input id="last_name" type="text" class="logintext form-control" name="last_name" >
                             </div>
                         </div>
 
@@ -59,7 +59,7 @@
                             <label for="profile_picture" class="col-md-4 col-form-label text-md-end labelRegister">{{ __('Profile Picture') }}</label>
 
                             <div class="col-md-6">
-                                <input id="profile_picture" type="file" class="form-control @error('profile_picture') is-invalid @enderror" name="profile_picture">
+                                <input id="profile_picture" type="file" class="logintext form-control @error('profile_picture') is-invalid @enderror" name="profile_picture">
 
                                 @error('profile_picture')
                                     <span class="invalid-feedback" role="alert">
