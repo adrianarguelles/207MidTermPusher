@@ -141,7 +141,7 @@
                 v-if="!addingRoom"
                 ref="chatWindow"
                 class="list-unstyled"
-                style="height: 560px; overflow-y: scroll"
+                style="height: 560px; overflow-y: scroll; overflow-x: hidden; padding: 0 1.5rem"
                 v-chat-scroll
               >
                 <!-- Chatroom Messages -->

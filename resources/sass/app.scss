@@ -460,16 +460,15 @@ body{
 }
 
 
-.message .p{
+.my_message .p{
 	position:  relative;
 	right: 0;
 	text-align: right;
 	max-width: 65%;
-	padding:  5px 10px;
-	background:  #e1e5e6;
+	padding:  12px;
+	background:  #1a9988;
 	border-radius:  10px;
-	font-size:  1em;
-	color: #1a9988;
+	font-size:  0.9em;
 }
 
 
@@ -478,16 +477,34 @@ body{
 	color: white;
 }
 
+.my_message .p::before
+{
+	content: '';
+	position:  absolute;
+	top: 0;
+	right: -12px;
+	width: 20px;
+	height: 20px;
+	background:  linear-gradient(135deg,#1a9988 50%, transparent 50%,transparent);
+}
+
+
 .friend_message{
 	justify-content:  flex-start;
 }
 
-.friend_message p{
+.friend_message .p{
 	background:  lightgray;
+	position:  relative;
+	text-align: right;
+	max-width: 65%;
+	padding:  12px;
+	border-radius:  10px;
+	font-size:  0.9em;
 
 }
 
-.friend_message p::before
+.friend_message .p::before
 {
 	content: '';
 	position:  absolute;
