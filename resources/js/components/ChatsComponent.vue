@@ -47,7 +47,6 @@
             <template v-slot:caret><span></span></template>
           </vue-multiselect>
         </div>
-        <!-- <input type="text" placeholder="Search or start a new chat">  -->
       </div>
 
     <!-- chatlist -->
@@ -129,7 +128,7 @@
           <!-- Placeholder chat box (if there are no rooms yet) -->
          <div v-if="roomMsgs.length === 0" class="card-body chatboxfix p-4">
            <div class="d-flex justify-content-center align-items-center h-100">
-                <p class="fs-3 text-muted">Click on the bubble icon <ion-icon name="chatbubble-ellipses-outline"></ion-icon> above, and then press <strong>enter</strong> to create a new chatroom!</p>
+                <p class="fs-3 text-muted" v-if="!loadingChatrooms">Click on the bubble icon <ion-icon name="chatbubble-ellipses-outline"></ion-icon> above to create a new chatroom!</p>
               </div>
          </div>
 
@@ -241,6 +240,7 @@ export default {
       addingRoom: false,
       newRoomMembers: [], // Stores members to be added to new room
       userDropdownOptions: [], // List of available users who may be added to a room
+      loadingChatrooms: true,
 
       // Add chat member variables
       isMemberSearchLoading: false,
@@ -416,11 +416,15 @@ export default {
       });
     },
     fetchChatrooms() {
+      this.loadingChatrooms = true;
       axios.get("rooms").then((response) => {
         if (response.data.length > 0) {
           this.chatrooms = response.data;
           this.activeRoom = this.chatrooms[0].room_id;
         }
+      })
+      .finally(() => {
+        this.loadingChatrooms = false;
       });
     },
     selectRoom: function (roomId) {
