@@ -195,7 +195,7 @@
         display: block;
         padding: 12px 20px;
         border: none;
-        background-color: #1a9988;
+        background-color: #e06822;
         color: white;
         cursor: pointer;
         width: 50%;
@@ -206,20 +206,19 @@
     }
 
     .formContainer .changeImage {
-        background-color: #eb5600;
+        background-color: #e06822;
         text-align: center;
         width: 77%;
         color: white;
-        display: inline-block;
+        display: block;
         padding: 12px 20px;
         cursor: pointer;
-        border-radius: 5px;
-        opacity: 0.8;        
+        border-radius: 5px;   
         float: right;
     }
 
     .formContainer .btn:hover, .changeImage:hover {
-        opacity: 1.0;
+	    background-color:#1a9988;
     }
 
 </style>
