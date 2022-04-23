@@ -25,7 +25,7 @@
                             </div>
 
                             <div class="FileUploadModal-actions gap-2">
-                                <button type="button" v-bind:disabled="isUploading" class="btn btn-primary" v-on:click="uploadFile()">
+                                <button type="button" v-bind:disabled="isUploading" class="btn btn-primary UploadAndSendBtn" v-on:click="uploadFile()">
                                     <!-- Spinner -->
                                     <span class="spinner-border text-light spinner-border-sm" role="status" v-if="isUploading">
                                         <span class="visually-hidden">Uploading...</span>
@@ -34,7 +34,7 @@
 
                                     <span>Upload &amp; Send</span>
                                 </button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" v-bind:disabled="isUploading">Close</button>
+                                <button type="button" class="btn btn-secondary" style="height: 50%;" data-bs-dismiss="modal" v-bind:disabled="isUploading">Cancel</button>
                             </div>
                         </form>
                     </div>
@@ -57,6 +57,22 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    .UploadAndSendBtn {
+        background-color: #e06822;
+        color: whitesmoke;
+        border: none;
+        padding: 5px;
+        width: 50%;
+    }
+
+    .UploadAndSendBtn:hover{
+        background-color:#1a9988;
+        color: whitesmoke;
+        border: none;
+        padding: 5px;
+        width: 50%;
     }
 
     .FileUploadModal-actions {
