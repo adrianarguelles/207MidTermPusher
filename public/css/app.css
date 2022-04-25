@@ -11457,7 +11457,7 @@ body {
 /* CHAT ROOMS */
 .chatlist {
   position: relative;
-  height: 600px;
+  height: 590px;
   /*calc(100% - 100px); /*60 + 40 = 100*/
   overflow-y: auto;
   border: 1px solid lightgray;

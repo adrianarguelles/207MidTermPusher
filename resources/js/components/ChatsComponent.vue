@@ -75,7 +75,8 @@
                 )
               }}
             </p>
-            <b>1</b>
+            <!-- UNREAD MESSAGES NOTIF
+            <b>1</b> -->
           </div>
         </div>
       </div>
