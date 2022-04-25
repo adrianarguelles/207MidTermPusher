@@ -5487,6 +5487,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -35929,6 +35932,8 @@ var render = function () {
                           ),
                         ])
                       : _vm._e(),
+                    _vm._v(" "),
+                    _c("b", [_vm._v("1")]),
                   ]),
                 ]
               ),
@@ -35955,7 +35960,7 @@ var render = function () {
                     _vm._v(
                       "\n              " +
                         _vm._s(_vm.activeRoomDetails.room_name) +
-                        "\n            "
+                        "\n\n            "
                     ),
                   ])
                 : _vm._e(),
@@ -36070,6 +36075,9 @@ var render = function () {
                     "div",
                     {
                       staticClass: "card-body chatboxfix p-0 roomMessages",
+                      style: {
+                        "background-image": "url(background_trans.png)",
+                      },
                       attrs: { id: "messages_room" + chatroom.room_id },
                     },
                     [
@@ -36131,37 +36139,40 @@ var render = function () {
                                           _vm._v(
                                             "\n                    " +
                                               _vm._s(message.message) +
-                                              "\n                  "
+                                              " \n                  "
                                           ),
                                         ]),
+                                        _vm._v(" "),
+                                        message.attachment_path
+                                          ? _c(
+                                              "div",
+                                              {
+                                                class: {
+                                                  message: true,
+                                                  my_message:
+                                                    message.user.id ===
+                                                    _vm.user.id,
+                                                  friend_message:
+                                                    message.user.id !==
+                                                    _vm.user.id,
+                                                },
+                                              },
+                                              [
+                                                _c("img", {
+                                                  staticClass:
+                                                    "img-thumbnail p",
+                                                  attrs: {
+                                                    src: message.attachment_path,
+                                                  },
+                                                  on: {
+                                                    load: _vm.scrollToChatBottom,
+                                                  },
+                                                }),
+                                              ]
+                                            )
+                                          : _vm._e(),
                                       ]
                                     ),
-                                    _vm._v(" "),
-                                    message.attachment_path
-                                      ? _c(
-                                          "div",
-                                          {
-                                            class: {
-                                              message: true,
-                                              my_message:
-                                                message.user.id === _vm.user.id,
-                                              friend_message:
-                                                message.user.id !== _vm.user.id,
-                                            },
-                                          },
-                                          [
-                                            _c("img", {
-                                              staticClass: "img-thumbnail p",
-                                              attrs: {
-                                                src: message.attachment_path,
-                                              },
-                                              on: {
-                                                load: _vm.scrollToChatBottom,
-                                              },
-                                            }),
-                                          ]
-                                        )
-                                      : _vm._e(),
                                   ]
                                 )
                               }

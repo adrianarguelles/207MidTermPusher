@@ -75,6 +75,7 @@
                 )
               }}
             </p>
+            <b>1</b>
           </div>
         </div>
       </div>
@@ -93,6 +94,7 @@
 
               <h4 v-if="activeRoomDetails">
                 {{ activeRoomDetails.room_name }}
+
               </h4>
             </div>
           </div>
@@ -126,7 +128,7 @@
 
         <div class="card card-default">
           <!-- Placeholder chat box (if there are no rooms yet) -->
-         <div v-if="roomMsgs.length === 0" class="card-body chatboxfix p-4">
+         <div v-if="roomMsgs.length === 0" class="card-body chatboxfix p-4" >
            <div class="d-flex justify-content-center align-items-center h-100">
                 <p class="fs-3 text-muted" v-if="!loadingChatrooms">Click on the bubble icon <ion-icon name="chatbubble-ellipses-outline"></ion-icon> above to create a new chatroom!</p>
               </div>
@@ -134,7 +136,7 @@
 
           <div v-for="chatroom in roomMsgs" :key="chatroom.room_id">
             <!-- Chat messages and 'is typing...' -->
-            <div class="card-body chatboxfix p-0 roomMessages" 
+            <div class="card-body chatboxfix p-0 roomMessages" :style="{'background-image':'url(background_trans.png)'}" 
               v-bind:id="'messages_room' + chatroom.room_id" 
               v-if="chatroom.room_id == activeRoom">
               <ul
@@ -158,10 +160,9 @@
                   }">
                     <span class="p">
                       <strong v-if="message.user.id !== user.id"> {{ message.user.first_name }} {{ message.user.last_name }} : </strong>
-                      {{ message.message }}
+                      {{ message.message }} 
                     </span>
-                  </div>
-                  <div v-if="message.attachment_path" :class="{
+                    <div v-if="message.attachment_path" :class="{
                     message: true, 
                     my_message: message.user.id === user.id,
                     friend_message: message.user.id !== user.id
@@ -173,6 +174,8 @@
                       @load="scrollToChatBottom"
                     />
                   </div>
+                  </div>
+                  
                 </li>
               </ul>
 
