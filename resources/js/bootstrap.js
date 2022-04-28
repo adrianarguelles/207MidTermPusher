@@ -28,13 +28,11 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
      broadcaster: 'pusher',
      key: process.env.MIX_PUSHER_APP_KEY,
      cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-     forceTLS: false,
      wsHost: window.location.hostname,
+     
+     // Enable WSS only on the production server
+     forceTLS: process.env.MIX_APP_ENV === 'production',
      wsPort: 6001,
+     wssPort: 443,
      disableStats: true,
- });
- 
- window.Echo.channel('DemoChannel')
-     .listen('WebsocketDemoEvent', (e)=>{
-         console.log(e);
  });
