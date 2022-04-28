@@ -129,7 +129,7 @@
 
         <div class="card card-default">
           <!-- Placeholder chat box (if there are no rooms yet) -->
-         <div v-if="roomMsgs.length === 0" class="card-body chatboxfix p-4" >
+         <div v-if="roomMsgs.length === 0" class="card-body chatboxfix p-4" :style="{'background-image':'url(background_trans.png)'}" >
            <div class="d-flex justify-content-center align-items-center h-100">
                 <p class="fs-3 text-muted" v-if="!loadingChatrooms">Click on the bubble icon <ion-icon name="chatbubble-ellipses-outline"></ion-icon> above to create a new chatroom!</p>
               </div>
@@ -163,7 +163,9 @@
                       <strong v-if="message.user.id !== user.id"> {{ message.user.first_name }} {{ message.user.last_name }} : </strong>
                       {{ message.message }} 
                     </span>
-                    <div v-if="message.attachment_path" :class="{
+                    
+                  </div>
+                  <div v-if="message.attachment_path" :class="{
                     message: true, 
                     my_message: message.user.id === user.id,
                     friend_message: message.user.id !== user.id
@@ -174,7 +176,6 @@
                       :src="message.attachment_path"
                       @load="scrollToChatBottom"
                     />
-                  </div>
                   </div>
                   
                 </li>
