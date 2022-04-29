@@ -17,7 +17,7 @@
                         <form class="container" ref="uploadForm">
                             <div class="form-group">
                                 <label for="attachment">Attachment: </label>
-                                <input class="form-control" type="file" v-bind:disabled="isUploading" accept="image/*" name="attachment" id="attachment" v-on:change="onFileChange($event)">
+                                <input class="form-control UploadField" type="file" v-bind:disabled="isUploading" accept="image/*" name="attachment" id="attachment" v-on:change="onFileChange($event)">
                             </div>
 
                             <div class="text-danger" v-for="error in errors" v-bind:key="error">
@@ -57,6 +57,11 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    .UploadField {
+        padding: 0.375rem 0.75rem;
+        margin: 0;
     }
 
     .UploadAndSendBtn {

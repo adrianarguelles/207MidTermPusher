@@ -476,13 +476,24 @@ body{
 	font-size:  1em;
 }
 
+.my_message .p--full {
+	position:  relative;
+	right: 0;
+	text-align: right;
+	max-width: 100%;
+	padding:  12px;
+	background:  #1a9988;
+	border-radius:  10px;
+	font-size:  1em;
+}
+
 
 .my_message{
 	justify-content:  flex-end;
 	color: white;
 }
 
-.my_message .p::before
+.my_message .p::before, .my_message .p--full::before
 {
 	content: '';
 	position:  absolute;
@@ -506,10 +517,20 @@ body{
 	padding:  12px;
 	border-radius:  10px;
 	font-size:  1em;
+}
+
+.friend_message .p--full {
+	background:  lightgray;
+	position:  relative;
+	text-align: left;
+	max-width: 100%;
+	padding:  12px;
+	border-radius:  10px;
+	font-size:  1em;
 
 }
 
-.friend_message .p::before
+.friend_message .p::before, .friend_message .p--full::before
 {
 	content: '';
 	position:  absolute;

@@ -149,11 +149,13 @@
               >
                 <!-- Chatroom Messages -->
                 <li
-                  class="p-2"
+                  class="py-2"
                   v-for="(message, index) in chatroom.messages"
                   :key="index"
                 >
-                  <div 
+                  <!-- Only show the text part if it isn't empty  -->
+                  <div
+                    v-if="message.message.length > 0"
                     class="message"
                     :class="{
                     my_message: message.user.id === user.id,
@@ -172,11 +174,14 @@
                     friend_message: message.user.id !== user.id
                   }">
                     <!-- Attachment -->
-                    <img
-                      class="img-thumbnail p"
-                      :src="message.attachment_path"
-                      @load="scrollToChatBottom"
-                    />
+                    <span class="p--full">
+                      <strong class="d-block pb-1" v-if="message.user.id !== user.id"> {{ message.user.first_name }} {{ message.user.last_name }} : </strong>
+                      <img
+                        class="img-fluid attachment"
+                        :src="message.attachment_path"
+                        @load="scrollToChatBottom"
+                      />
+                    </span>
                   </div>
                   
                 </li>
@@ -216,9 +221,9 @@
 </template>
 
 <style scoped>
-.img-thumbnail {
-  max-width: 15rem;
-}
+  .attachment {
+    max-width: 15rem;
+  }
 </style>
 
 
