@@ -67,7 +67,7 @@
 
           <!-- The message last sent to the room -->
           <div class="message_p">
-            <p v-if="roomMsgs.find(room => room.room_id == chatroom.room_id).messages.length > 0">
+            <p v-if="roomMsgs.length > 0 && roomMsgs[getTargetRoomIndex(chatroom.room_id)].messages.length > 0">
               {{
                 // Get the last message and convert to string
                 convertMessageObjectToString(
@@ -153,9 +153,9 @@
                   v-for="(message, index) in chatroom.messages"
                   :key="index"
                 >
-                  <!-- TODO: Differentiate messages you sent -->
-                  <div :class="{
-                    message: true, 
+                  <div 
+                    class="message"
+                    :class="{
                     my_message: message.user.id === user.id,
                     friend_message: message.user.id !== user.id
                   }">
@@ -165,8 +165,9 @@
                     </span>
                     
                   </div>
-                  <div v-if="message.attachment_path" :class="{
-                    message: true, 
+                  <div v-if="message.attachment_path" 
+                    class="message"
+                    :class="{
                     my_message: message.user.id === user.id,
                     friend_message: message.user.id !== user.id
                   }">
@@ -390,8 +391,10 @@ export default {
       });
     },
     scrollToChatBottom() {
-      const chatWindow = this.$refs.chatWindow;
-      chatWindow.scrollTop = chatWindow.scrollHeight;
+      const chatWindows = this.$refs.chatWindow;
+      chatWindows.forEach(window => {
+        window.scrollTop = window.scrollHeight;
+      });
     },
     sendMessage() {
       let found = this.getTargetRoomIndex(this.activeRoom);
