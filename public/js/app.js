@@ -5491,6 +5491,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5653,8 +5660,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     scrollToChatBottom: function scrollToChatBottom() {
-      var chatWindow = this.$refs.chatWindow;
-      chatWindow.scrollTop = chatWindow.scrollHeight;
+      var chatWindows = this.$refs.chatWindow;
+      chatWindows.forEach(function (window) {
+        window.scrollTop = window.scrollHeight;
+      });
     },
     sendMessage: function sendMessage() {
       var _this4 = this;
@@ -5858,6 +5867,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
 //
 //
 //
@@ -6238,6 +6252,7 @@ function toggleheaderleft() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
+/* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 
 try {
@@ -6262,15 +6277,14 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
-  key: "chatKey",
-  cluster: "mt1",
-  forceTLS: false,
+  key: "1be06698ba23ef83443b",
+  cluster: "ap1",
   wsHost: window.location.hostname,
+  // Enable WSS only on the production server
+  forceTLS: process.env.MIX_APP_ENV === 'production',
   wsPort: 6001,
+  wssPort: 443,
   disableStats: true
-});
-window.Echo.channel('DemoChannel').listen('WebsocketDemoEvent', function (e) {
-  console.log(e);
 });
 
 /***/ }),
@@ -11319,7 +11333,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.img-thumbnail[data-v-2bb55d4d] {\r\n  max-width: 15rem;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.attachment[data-v-2bb55d4d] {\n  max-width: 15rem;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -11343,7 +11357,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.UploadButton[data-v-7c602e76] {\n    /* cursor:  pointer; */\n    font-size:  2em;\n    max-height: -webkit-min-content;\n    max-height: -moz-min-content;\n    max-height: min-content;\n    padding: 0;\n    color:  whitesmoke;\n    background: none;\n    border: none;\n\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.UploadAndSendBtn[data-v-7c602e76] {\n    background-color: #e06822;\n    color: whitesmoke;\n    border: none;\n    padding: 5px;\n    width: 50%;\n}\n.UploadAndSendBtn[data-v-7c602e76]:hover{\n    background-color:#1a9988;\n    color: whitesmoke;\n    border: none;\n    padding: 5px;\n    width: 50%;\n}\n.FileUploadModal-actions[data-v-7c602e76] {\n    display: flex;\n    flex-flow: row nowrap;\n    justify-content: space-evenly;\n    margin-top: 0.75rem;\n}\n.FileUploadModal-actions > .btn[data-v-7c602e76] {\n   flex: 1;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.UploadButton[data-v-7c602e76] {\n    /* cursor:  pointer; */\n    font-size:  2em;\n    max-height: -webkit-min-content;\n    max-height: -moz-min-content;\n    max-height: min-content;\n    padding: 0;\n    color:  whitesmoke;\n    background: none;\n    border: none;\n\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n.UploadField[data-v-7c602e76] {\n    padding: 0.375rem 0.75rem;\n    margin: 0;\n}\n.UploadAndSendBtn[data-v-7c602e76] {\n    background-color: #e06822;\n    color: whitesmoke;\n    border: none;\n    padding: 5px;\n    width: 50%;\n}\n.UploadAndSendBtn[data-v-7c602e76]:hover{\n    background-color:#1a9988;\n    color: whitesmoke;\n    border: none;\n    padding: 5px;\n    width: 50%;\n}\n.FileUploadModal-actions[data-v-7c602e76] {\n    display: flex;\n    flex-flow: row nowrap;\n    justify-content: space-evenly;\n    margin-top: 0.75rem;\n}\n.FileUploadModal-actions > .btn[data-v-7c602e76] {\n   flex: 1;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -35913,9 +35927,9 @@ var render = function () {
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "message_p" }, [
-                    _vm.roomMsgs.find(function (room) {
-                      return room.room_id == chatroom.room_id
-                    }).messages.length > 0
+                    _vm.roomMsgs.length > 0 &&
+                    _vm.roomMsgs[_vm.getTargetRoomIndex(chatroom.room_id)]
+                      .messages.length > 0
                       ? _c("p", [
                           _vm._v(
                             "\n            " +
@@ -36040,31 +36054,38 @@ var render = function () {
         { staticClass: "card card-default" },
         [
           _vm.roomMsgs.length === 0
-            ? _c("div", { staticClass: "card-body chatboxfix p-4" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "d-flex justify-content-center align-items-center h-100",
-                  },
-                  [
-                    !_vm.loadingChatrooms
-                      ? _c(
-                          "p",
-                          { staticClass: "fs-3 text-muted" },
-                          [
-                            _vm._v("Click on the bubble icon "),
-                            _c("ion-icon", {
-                              attrs: { name: "chatbubble-ellipses-outline" },
-                            }),
-                            _vm._v(" above to create a new chatroom!"),
-                          ],
-                          1
-                        )
-                      : _vm._e(),
-                  ]
-                ),
-              ])
+            ? _c(
+                "div",
+                {
+                  staticClass: "card-body chatboxfix p-4",
+                  style: { "background-image": "url(background_trans.png)" },
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "d-flex justify-content-center align-items-center h-100",
+                    },
+                    [
+                      !_vm.loadingChatrooms
+                        ? _c(
+                            "p",
+                            { staticClass: "fs-3 text-muted" },
+                            [
+                              _vm._v("Click on the bubble icon "),
+                              _c("ion-icon", {
+                                attrs: { name: "chatbubble-ellipses-outline" },
+                              }),
+                              _vm._v(" above to create a new chatroom!"),
+                            ],
+                            1
+                          )
+                        : _vm._e(),
+                    ]
+                  ),
+                ]
+              )
             : _vm._e(),
           _vm._v(" "),
           _vm._l(_vm.roomMsgs, function (chatroom) {
@@ -36105,61 +36126,93 @@ var render = function () {
                               function (message, index) {
                                 return _c(
                                   "li",
-                                  { key: index, staticClass: "p-2" },
+                                  { key: index, staticClass: "py-2" },
                                   [
-                                    _c(
-                                      "div",
-                                      {
-                                        class: {
-                                          message: true,
-                                          my_message:
-                                            message.user.id === _vm.user.id,
-                                          friend_message:
-                                            message.user.id !== _vm.user.id,
-                                        },
-                                      },
-                                      [
-                                        _c("span", { staticClass: "p" }, [
-                                          message.user.id !== _vm.user.id
-                                            ? _c("strong", [
-                                                _vm._v(
-                                                  " " +
-                                                    _vm._s(
-                                                      message.user.first_name
-                                                    ) +
-                                                    " " +
-                                                    _vm._s(
-                                                      message.user.last_name
-                                                    ) +
-                                                    " : "
-                                                ),
-                                              ])
-                                            : _vm._e(),
-                                          _vm._v(
-                                            "\n                    " +
-                                              _vm._s(message.message) +
-                                              " \n                  "
-                                          ),
-                                        ]),
-                                        _vm._v(" "),
-                                        message.attachment_path
-                                          ? _c(
-                                              "div",
-                                              {
-                                                class: {
-                                                  message: true,
-                                                  my_message:
-                                                    message.user.id ===
-                                                    _vm.user.id,
-                                                  friend_message:
-                                                    message.user.id !==
-                                                    _vm.user.id,
-                                                },
-                                              },
+                                    message.message.length > 0
+                                      ? _c(
+                                          "div",
+                                          {
+                                            staticClass: "message",
+                                            class: {
+                                              my_message:
+                                                message.user.id === _vm.user.id,
+                                              friend_message:
+                                                message.user.id !== _vm.user.id,
+                                            },
+                                          },
+                                          [
+                                            _c("span", { staticClass: "p" }, [
+                                              message.user.id !== _vm.user.id
+                                                ? _c("strong", [
+                                                    _vm._v(
+                                                      " " +
+                                                        _vm._s(
+                                                          message.user
+                                                            .first_name
+                                                        ) +
+                                                        " " +
+                                                        _vm._s(
+                                                          message.user.last_name
+                                                        ) +
+                                                        " : "
+                                                    ),
+                                                  ])
+                                                : _vm._e(),
+                                              _vm._v(
+                                                "\n                    " +
+                                                  _vm._s(message.message) +
+                                                  " \n                  "
+                                              ),
+                                            ]),
+                                          ]
+                                        )
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    message.attachment_path
+                                      ? _c(
+                                          "div",
+                                          {
+                                            staticClass: "message",
+                                            class: {
+                                              my_message:
+                                                message.user.id === _vm.user.id,
+                                              friend_message:
+                                                message.user.id !== _vm.user.id,
+                                            },
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              { staticClass: "p--full" },
                                               [
+                                                message.user.id !== _vm.user.id
+                                                  ? _c(
+                                                      "strong",
+                                                      {
+                                                        staticClass:
+                                                          "d-block pb-1",
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          " " +
+                                                            _vm._s(
+                                                              message.user
+                                                                .first_name
+                                                            ) +
+                                                            " " +
+                                                            _vm._s(
+                                                              message.user
+                                                                .last_name
+                                                            ) +
+                                                            " : "
+                                                        ),
+                                                      ]
+                                                    )
+                                                  : _vm._e(),
+                                                _vm._v(" "),
                                                 _c("img", {
                                                   staticClass:
-                                                    "img-thumbnail p",
+                                                    "img-fluid attachment",
                                                   attrs: {
                                                     src: message.attachment_path,
                                                   },
@@ -36168,10 +36221,10 @@ var render = function () {
                                                   },
                                                 }),
                                               ]
-                                            )
-                                          : _vm._e(),
-                                      ]
-                                    ),
+                                            ),
+                                          ]
+                                        )
+                                      : _vm._e(),
                                   ]
                                 )
                               }
@@ -36325,7 +36378,7 @@ var render = function () {
                     ]),
                     _vm._v(" "),
                     _c("input", {
-                      staticClass: "form-control",
+                      staticClass: "form-control UploadField",
                       attrs: {
                         type: "file",
                         disabled: _vm.isUploading,
@@ -48822,7 +48875,7 @@ Vue.compile = compileToFunctions;
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"_args":[["axios@0.21.4","C:\\\\Users\\\\Karla Malla\\\\Documents\\\\GitHub\\\\207MidTermPusher"]],"_development":true,"_from":"axios@0.21.4","_id":"axios@0.21.4","_inBundle":false,"_integrity":"sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"axios@0.21.4","name":"axios","escapedName":"axios","rawSpec":"0.21.4","saveSpec":null,"fetchSpec":"0.21.4"},"_requiredBy":["#DEV:/"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.21.4.tgz","_spec":"0.21.4","_where":"C:\\\\Users\\\\Karla Malla\\\\Documents\\\\GitHub\\\\207MidTermPusher","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"^1.14.0"},"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"homepage":"https://axios-http.com","jsdelivr":"dist/axios.min.js","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","unpkg":"dist/axios.min.js","version":"0.21.4"}');
+module.exports = JSON.parse('{"_args":[["axios@0.21.4","D:\\\\php\\\\chattest"]],"_development":true,"_from":"axios@0.21.4","_id":"axios@0.21.4","_inBundle":false,"_integrity":"sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"axios@0.21.4","name":"axios","escapedName":"axios","rawSpec":"0.21.4","saveSpec":null,"fetchSpec":"0.21.4"},"_requiredBy":["#DEV:/"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.21.4.tgz","_spec":"0.21.4","_where":"D:\\\\php\\\\chattest","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"^1.14.0"},"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"homepage":"https://axios-http.com","jsdelivr":"dist/axios.min.js","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","unpkg":"dist/axios.min.js","version":"0.21.4"}');
 
 /***/ })
 
