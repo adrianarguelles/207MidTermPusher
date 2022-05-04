@@ -31,8 +31,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
      wsHost: process.env.MIX_WS_HOST || window.location.hostname,
      
      // Enable WSS only on the production server
-     // forceTLS: process.env.MIX_APP_ENV === 'production',
-     forceTLS: true,
+     forceTLS: process.env.MIX_APP_ENV === 'production',
      wsPort: process.env.MIX_WS_PORT || 6001,
      wssPort: process.env.MIX_WS_PORT || 6001,
      disableStats: true,
