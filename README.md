@@ -9,21 +9,21 @@
 
 ## How to Run the Application
 1. Clone this repository
-1. Open your terminal or command prompt. The succeeding commands must be run in it.
-1. Run `cd <path-to-the-repository-directory>` to set the repository as your current directory.
-1. Run `npm install`
-2. Run `composer install`
-4. Run `cp .env.example .env` and configure your database in .env file (i.e., set the variables that start with `DB_`).
+2. Open your terminal or command prompt. The succeeding commands must be run in it.
+3. Run `cd <path-to-the-repository-directory>` to set the repository as your current directory.
+4. Run `npm install`
+5. Run `composer install`
+6. Run `cp .env.example .env` and configure your database in .env file (i.e., set the variables that start with `DB_`).
     - Sample database configuration: ![DB .env setting](/DB.env%20settings.png)
     - If you did this step correctly, there should be a `.env` file and a `.env.example` file inside your 207MidtermPusher folder.
-6. Run `php artisan key:generate`
-7. Run `php artisan storage:link` to links to the images folder
-8. Run migration to create tables in the database.
+7. Run migration to create tables in the database.
 `php artisan migrate`
-5. Run `npm run watch`.
-6. Open another terminal window and run `php artisan websocket:serve`,
-7. Open yet another terminal window and run `php artisan serve`
-7. Open your web browser and navigate to http://localhost:8000.
+8. Run `php artisan key:generate`
+9. Run `php artisan storage:link` to links to the images folder
+10. Run `npm run watch`. Wait for Laravel Mix to finish building.
+11. Open another terminal window and run `php artisan websocket:serve`,
+12. Open yet another terminal window and run `php artisan serve`
+13. Open your web browser and navigate to http://localhost:8000.
 
 ## Group Members
 - Jasper Francisco
