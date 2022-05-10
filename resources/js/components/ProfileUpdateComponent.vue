@@ -199,7 +199,6 @@
         width: 50%;
         margin: 5px;
         margin-bottom: 50px;
-        opacity: 0.8;
         float: right;
     }
 
